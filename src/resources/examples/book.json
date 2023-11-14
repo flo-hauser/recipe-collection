@@ -1,0 +1,12 @@
+{
+  "_links": {
+    "recipes": "/api/1/TODO",
+    "self": "/api/1/books/1",
+    "user": "/api/1/users/2"
+  },
+  "author": "cookbok author",
+  "id": 1,
+  "title": "t1",
+  "type": "cookbook",
+  "year": 2000
+}

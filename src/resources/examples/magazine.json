@@ -1,0 +1,12 @@
+{
+  "_links": {
+    "recipes": "/api/1/TODO",
+    "self": "/api/1/books/3",
+    "user": "/api/1/users/2"
+  },
+  "id": 3,
+  "issue": "15 - 5",
+  "title": "kochheft",
+  "type": "magazine",
+  "year": 2015
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "_links": {
+      "book": "/api/1/books/1",
+      "self": "/api/1/recipes/1",
+      "user": "/api/1/users/2"
+    },
+    "id": 1,
+    "image_path": null,
+    "page": 250,
+    "title": "first recipe"
+  },
+  {
+    "_links": {
+      "book": "/api/1/books/1",
+      "self": "/api/1/recipes/2",
+      "user": "/api/1/users/2"
+    },
+    "id": 2,
+    "image_path": null,
+    "page": 300,
+    "title": "second recipe"
+  }
+]

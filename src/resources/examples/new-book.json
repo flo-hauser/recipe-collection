@@ -1,0 +1,14 @@
+[
+  {
+    "title": "t1",
+    "year": 2000,
+    "author": "cookbok author",
+    "type": "cookbook"
+  },
+  {
+    "title": "kochheft",
+    "year": 2015,
+    "issue": "15 - 5",
+    "type": "magazine"
+  }
+]
