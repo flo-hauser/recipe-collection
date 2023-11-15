@@ -26,6 +26,7 @@ export default createVuetify({
           info: "#90A4AE",
           success: "#8BC34A",
           warning: "#fb8c00",
+          lightSurface: "#DCEDC8"
         },
       },
     },
