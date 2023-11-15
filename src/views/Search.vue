@@ -9,13 +9,8 @@
 
     {{ searchTerm }}
 
-    <div>
-      <div v-for="recipe of searchResults" :key="recipe.id">
-        <p>id: {{ recipe.id }}</p>
-        <p>title: {{ recipe.title }}</p>
-        <p>page: {{ recipe.page }}</p>
-        <p>img_path: {{ recipe.image_path }}</p>
-      </div>
+    <div class="search-results">
+      <RecipeCard v-for="recipe of searchResults" :key="recipe.id" :recipe="recipe"></RecipeCard>
     </div>
   </div>
 </template>
@@ -24,6 +19,7 @@
 import { ref } from "vue";
 import { Recipe } from "@/types/dto/Recipe"
 import recipes from "@/resources/examples/recipes.json"
+import RecipeCard from "@/components/RecipeCard.vue"
 
 function loadRecipes() {
   const promise = new Promise<Array<Recipe>>((resolve) => {
@@ -51,6 +47,9 @@ export default {
 
     return { searchTerm, searchResults, onSearch };
   },
+  components: {
+    RecipeCard
+  }
 };
 </script>
 
@@ -63,5 +62,13 @@ h1 {
   h1 {
     margin-bottom: 1rem;
   }
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  gap: 2rem;
 }
 </style>
