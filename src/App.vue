@@ -8,7 +8,11 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" mobile-breakpoint="sm" color="lightSurface">
+    <v-navigation-drawer
+      v-model="drawer"
+      mobile-breakpoint="sm"
+      color="lightSurface"
+    >
       <v-list>
         <v-list-item type="subheader" title="Rezepte"></v-list-item>
         <v-list-item title="Suche"></v-list-item>
@@ -34,7 +38,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref } from "vue";
+import { useAuthStore } from "./store/auth";
+import { onMounted } from "vue";
+import router from "./router";
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+  if (!authStore.loggedIn) {
+    router.push({ path: "/login" });
+  }
+});
 
 const drawer = ref(true);
 </script>

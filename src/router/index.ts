@@ -1,17 +1,22 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
-    path: '/',
-    component: () => import('@/views/Search.vue'),
-    
+    name: "index",
+    path: "/",
+    component: () => import("@/views/Search.vue"),
   },
-]
+
+  {
+    path: "/login",
+    component: () => import("@/views/Login.vue"),
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+});
 
-export default router
+export default router;

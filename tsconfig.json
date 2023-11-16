@@ -28,6 +28,7 @@
     "src/**/*.vue",
     "vite.config.ts",
     "src/types/**/*.ts",
+    "src/composables/**/*.ts",
     "src/resources/**/*.json"
   ]
 }
