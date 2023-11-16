@@ -1,7 +1,7 @@
 type UserCreate = {
-    username: string;
-    email: string;
-    password: string;
-}
+  username: string;
+  email: string;
+  password: string;
+};
 
-export { UserCreate }
+export { UserCreate };

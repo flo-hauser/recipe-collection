@@ -1,3 +1,3 @@
 type BookType = "cookbook" | "magazine";
 
-export { BookType }
+export { BookType };

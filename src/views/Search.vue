@@ -1,7 +1,12 @@
 <template>
   <div>
     <h1>Rezeptesuche</h1>
-    <v-text-field v-model="searchTerm" label="Suche" prepend-inner-icon="mdi-magnify" variant="outlined">
+    <v-text-field
+      v-model="searchTerm"
+      label="Suche"
+      prepend-inner-icon="mdi-magnify"
+      variant="outlined"
+    >
       <template v-slot:append-inner>
         <v-btn @click.stop="onSearch">Suche</v-btn>
       </template>
@@ -10,16 +15,20 @@
     {{ searchTerm }}
 
     <div class="search-results">
-      <RecipeCard v-for="recipe of searchResults" :key="recipe.id" :recipe="recipe"></RecipeCard>
+      <RecipeCard
+        v-for="recipe of searchResults"
+        :key="recipe.id"
+        :recipe="recipe"
+      ></RecipeCard>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { ref } from "vue";
-import { Recipe } from "@/types/dto/Recipe"
-import recipes from "@/resources/examples/recipes.json"
-import RecipeCard from "@/components/RecipeCard.vue"
+import { Recipe } from "@/types/dto/Recipe";
+import recipes from "@/resources/examples/recipes.json";
+import RecipeCard from "@/components/RecipeCard.vue";
 
 function loadRecipes() {
   const promise = new Promise<Array<Recipe>>((resolve) => {
@@ -40,7 +49,7 @@ export default {
       searchResults.value = [];
 
       const mockedServerResponse = loadRecipes();
-      mockedServerResponse.then(res => {
+      mockedServerResponse.then((res) => {
         searchResults.value = res;
       });
     }
@@ -48,8 +57,8 @@ export default {
     return { searchTerm, searchResults, onSearch };
   },
   components: {
-    RecipeCard
-  }
+    RecipeCard,
+  },
 };
 </script>
 

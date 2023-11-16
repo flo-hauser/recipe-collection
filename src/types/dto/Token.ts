@@ -1,7 +1,7 @@
 type Token = {
-    token: string;
-    token_expiration: string;
-    token_lifetime: number;
-}
+  token: string;
+  token_expiration: string;
+  token_lifetime: number;
+};
 
-export { Token }
+export { Token };
