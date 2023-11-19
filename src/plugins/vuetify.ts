@@ -7,9 +7,11 @@
 // Styles
 import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 // Composables
 import { createVuetify } from "vuetify";
+import { aliases, fa } from "vuetify/iconsets/fa";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -26,9 +28,15 @@ export default createVuetify({
           info: "#90A4AE",
           success: "#8BC34A",
           warning: "#fb8c00",
-          lightSurface: "#DCEDC8"
+          lightSurface: "#DCEDC8",
         },
       },
+    },
+  },
+  icons: {
+    aliases,
+    sets: {
+      fa,
     },
   },
 });

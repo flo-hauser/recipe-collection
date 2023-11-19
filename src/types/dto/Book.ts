@@ -19,4 +19,9 @@ type Magazine = {
   type: Exclude<BookType, "cookbook">;
 } & Book;
 
-export { Cookbook, Magazine, Book };
+type GeneralBook = {
+  author?: string;
+  issue?: string;
+} & Book;
+
+export { Cookbook, Magazine, Book, GeneralBook };
