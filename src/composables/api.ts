@@ -6,7 +6,7 @@ import { Token } from "@/types/dto/Token";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-async function useRecipeApi<T>(endpoint: string, method: Method) {
+async function useRecipeApi<T>(endpoint: string, method: Method = "GET") {
   const store = useAuthStore();
   const url = urlJoin(apiUrl, endpoint);
 

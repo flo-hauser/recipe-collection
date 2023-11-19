@@ -13,20 +13,7 @@
       mobile-breakpoint="sm"
       color="lightSurface"
     >
-      <v-list>
-        <v-list-item type="subheader" title="Rezepte"></v-list-item>
-        <v-list-item title="Suche"></v-list-item>
-        <v-list-item>Listen</v-list-item>
-        <v-list-item>Hinzufügen</v-list-item>
-        <v-list-item type="divider"></v-list-item>
-        <v-divider></v-divider>
-        <v-list-item type="subheader" title="Bücher"></v-list-item>
-        <v-list-item>Sammlung</v-list-item>
-        <v-list-item>Hinzufügen</v-list-item>
-        <v-list-item type="divider"></v-list-item>
-        <v-divider></v-divider>
-        <v-list-item>Benutzer</v-list-item>
-      </v-list>
+      <ListNavigation></ListNavigation>
     </v-navigation-drawer>
 
     <v-main class="d-flex justify-center mt-3">
@@ -42,6 +29,7 @@ import { ref } from "vue";
 import { useAuthStore } from "./store/auth";
 import { onMounted } from "vue";
 import router from "./router";
+import ListNavigation from "./components/ListNavigation.vue";
 
 const authStore = useAuthStore();
 

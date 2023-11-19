@@ -57,13 +57,13 @@
 import { ref } from "vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useAuthStore } from "@/store/auth";
-import router from "@/router";
+import { useRouter } from "vue-router";
 
 const username = ref("");
 const password = ref("");
 const loading = ref(false);
 const form = ref(false);
-
+const router = useRouter();
 const authStore = useAuthStore();
 
 function onSubmit() {
