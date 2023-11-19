@@ -6,7 +6,11 @@ import { Token } from "@/types/dto/Token";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-async function useRecipeApi<T>(endpoint: string, method: Method = "GET") {
+async function useRecipeApi<T>(
+  endpoint: string,
+  method: Method = "GET",
+  data: object | null = null
+) {
   const store = useAuthStore();
   const url = urlJoin(apiUrl, endpoint);
 
@@ -19,6 +23,10 @@ async function useRecipeApi<T>(endpoint: string, method: Method = "GET") {
     config.headers = {
       Authorization: `Bearer ${store.token.token}`,
     };
+  }
+
+  if (data) {
+    config.data = data;
   }
 
   const response = await axios<T>(config);
