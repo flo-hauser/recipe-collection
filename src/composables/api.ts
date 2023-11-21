@@ -12,6 +12,7 @@ async function useRecipeApi<T>(
   data: object | null = null
 ) {
   const store = useAuthStore();
+  endpoint = endpoint.replace(/api\/\d\//, "");
   const url = urlJoin(apiUrl, endpoint);
 
   const config: AxiosRequestConfig = {

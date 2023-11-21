@@ -40,6 +40,17 @@
           >
             Anmelden
           </v-btn>
+          <v-divider inset></v-divider>
+          <v-btn
+            :loading="loading"
+            block
+            variant="outlined"
+            size="large"
+            class="mt-3"
+            @click.stop="onRegister"
+          >
+            Registrieren
+          </v-btn>
         </v-form>
       </v-fade-transition>
       <v-fade-transition duration="5000">
@@ -82,6 +93,10 @@ function onSubmit() {
     .finally(() => {
       loading.value = false;
     });
+}
+
+function onRegister() {
+  console.log("register");
 }
 
 function required(v: string) {
