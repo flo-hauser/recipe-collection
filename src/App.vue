@@ -36,6 +36,7 @@
 
     <v-main class="d-flex justify-center mt-3">
       <v-container>
+        <MessagesContainer></MessagesContainer>
         <router-view></router-view>
       </v-container>
       <DialogModal></DialogModal>
@@ -49,6 +50,7 @@ import { useAuthStore } from "./store/auth";
 import { onMounted } from "vue";
 import ListNavigation from "./components/ListNavigation.vue";
 import DialogModal from "@/components/DialogModal.vue";
+import MessagesContainer from "./components/MessagesContainer.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
