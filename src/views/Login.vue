@@ -90,6 +90,9 @@ function onSubmit() {
         router.push({ path: "/" });
       }, 2000);
     })
+    .catch(() => {
+      password.value = "";
+    })
     .finally(() => {
       loading.value = false;
     });

@@ -6,7 +6,7 @@ import { Token } from "@/types/dto/Token";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-async function useRecipeApi<T>(
+function useRecipeApi<T>(
   endpoint: string,
   method: Method = "GET",
   data: object | null = null
@@ -18,6 +18,7 @@ async function useRecipeApi<T>(
   const config: AxiosRequestConfig = {
     method,
     url,
+    withCredentials: true,
   };
 
   if (store.loggedIn && store.token?.token) {
@@ -30,8 +31,14 @@ async function useRecipeApi<T>(
     config.data = data;
   }
 
-  const response = await axios<T>(config);
-  return response.data;
+  return axios<T>(config)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.warn(`failed api request on ${endpoint}`);
+      throw err;
+    });
 }
 
 function useRecipeApiLogin(username: string, password: string) {
@@ -42,13 +49,13 @@ function useRecipeApiLogin(username: string, password: string) {
   return axios
     .get<Token>(urlJoin(apiUrl, "tokens"), {
       headers,
+      withCredentials: true,
     })
     .then((response) => {
       return response.data;
     })
     .catch((err) => {
-      console.log(err);
-      return null;
+      throw err;
     });
 }
 

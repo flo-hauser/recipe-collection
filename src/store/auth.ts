@@ -13,15 +13,62 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     async login(username: string, password: string) {
-      this.token = await useRecipeApiLogin(username, password);
-      if (this.token) {
-        this.loggedIn = true;
-        this.user = await useRecipeApi<User>("users/me", "GET");
-      } else {
-        this.loggedIn = false;
-        this.user = null;
-        this.token = null;
+      try {
+        this.token = await useRecipeApiLogin(username, password);
+        if (this.token) {
+          this.loggedIn = true;
+          this.user = await useRecipeApi<User>("users/me", "GET");
+        } else {
+          this.$reset;
+        }
+      } catch (err) {
+        console.warn("failed login");
+        throw err;
       }
+    },
+    logout() {
+      this.$reset;
+    },
+
+    async refresh() {
+      try {
+        const t = await useRecipeApi<Token>("tokens/refresh", "GET");
+        if (t) {
+          this.token = t;
+        }
+        return false;
+      } catch (e) {
+        console.log("could not refresh");
+      }
+    },
+  },
+
+  getters: {
+    // Return Fn to recalculate new Date on call
+    isTokenValid: (state) => {
+      return () => {
+        if (state.token?.token_expiration) {
+          const expiryDateString = state.token.token_expiration;
+          const expiryDate = new Date(Date.parse(expiryDateString));
+          const currentDate = new Date();
+          return expiryDate > currentDate ? true : false;
+        } else {
+          return false;
+        }
+      };
+    },
+
+    tokenRemainingTime: (state) => {
+      return () => {
+        if (state.token?.token_expiration) {
+          const expiryDate = new Date(Date.parse(state.token.token_expiration));
+          const currentDate = new Date();
+          const diff = expiryDate.getTime() - currentDate.getTime();
+          return diff;
+        } else {
+          return 0;
+        }
+      };
     },
   },
 

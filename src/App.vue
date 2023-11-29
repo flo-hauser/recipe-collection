@@ -52,10 +52,24 @@ import { useRouter } from "vue-router";
 const authStore = useAuthStore();
 const router = useRouter();
 
-onMounted(() => {
+onMounted(async () => {
+  await authStore.refresh();
+
   if (!authStore.loggedIn) {
+    authStore.logout();
     router.push({ path: "/login" });
   }
+
+  if (!authStore.isTokenValid()) {
+    authStore.logout();
+    router.push({ path: "/login" });
+  }
+
+  setInterval(() => {
+    if (authStore.loggedIn && authStore.tokenRemainingTime() < 12000) {
+      authStore.refresh();
+    }
+  }, 10000);
 });
 
 function onLogout() {
