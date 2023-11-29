@@ -38,6 +38,7 @@
       <v-container>
         <router-view></router-view>
       </v-container>
+      <DialogModal></DialogModal>
     </v-main>
   </v-app>
 </template>
@@ -47,10 +48,11 @@ import { ref } from "vue";
 import { useAuthStore } from "./store/auth";
 import { onMounted } from "vue";
 import ListNavigation from "./components/ListNavigation.vue";
+import DialogModal from "@/components/DialogModal.vue";
 import { useRouter } from "vue-router";
 
-const authStore = useAuthStore();
 const router = useRouter();
+const authStore = useAuthStore();
 
 onMounted(async () => {
   await authStore.refresh();

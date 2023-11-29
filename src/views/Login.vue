@@ -69,6 +69,7 @@ import { ref } from "vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "vue-router";
+import { useModalStore } from "@/store/modal";
 
 const username = ref("");
 const password = ref("");
@@ -76,6 +77,7 @@ const loading = ref(false);
 const form = ref(false);
 const router = useRouter();
 const authStore = useAuthStore();
+const modalStore = useModalStore();
 
 function onSubmit() {
   if (!form.value) {
@@ -92,6 +94,7 @@ function onSubmit() {
     })
     .catch(() => {
       password.value = "";
+      modalStore.showDialog("Anmeldung fehlgeschlagen", "alert");
     })
     .finally(() => {
       loading.value = false;
