@@ -102,7 +102,7 @@ function onSubmit() {
 }
 
 function onRegister() {
-  console.log("register");
+  router.push({ name: "register" });
 }
 
 function required(v: string) {

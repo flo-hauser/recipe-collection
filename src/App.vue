@@ -37,7 +37,7 @@
     <v-main class="d-flex justify-center mt-3">
       <v-container>
         <MessagesContainer></MessagesContainer>
-        <router-view></router-view>
+        <v-fade-transition><router-view></router-view></v-fade-transition>
       </v-container>
       <DialogModal></DialogModal>
     </v-main>

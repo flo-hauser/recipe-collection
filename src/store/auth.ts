@@ -2,6 +2,7 @@
 import { defineStore } from "pinia";
 import { Token } from "@/types/dto/Token";
 import { User } from "@/types/dto/User";
+import { NewUser } from "@/types/dto/NewUser";
 import { useRecipeApiLogin, useRecipeApi } from "@/composables/api";
 
 export const useAuthStore = defineStore("auth", {
@@ -39,6 +40,20 @@ export const useAuthStore = defineStore("auth", {
         return false;
       } catch (e) {
         console.log("could not refresh");
+      }
+    },
+
+    async register(newUserObject: NewUser) {
+      try {
+        const newUser = await useRecipeApi<User>(
+          "users",
+          "POST",
+          newUserObject
+        );
+        return newUser;
+      } catch (e) {
+        console.log(e);
+        throw e;
       }
     },
   },
