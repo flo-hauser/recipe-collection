@@ -11,19 +11,23 @@
           v-model="username"
           :readonly="loading"
           :rules="[required]"
-          @input="checkUserInfoExists"
+          @input="checkUserExists"
           :error-messages="userErrorMessages"
           class="mb-2"
           label="Name"
+          name="username"
+          autocomplete="username"
         ></v-text-field>
         <v-text-field
           v-model="email"
           :readonly="loading"
           :rules="[required, isEmail]"
-          @input="checkUserInfoExists"
+          @input="checkEmailExists"
           type="email"
           class="mb-2"
           label="E-Mail"
+          name="email"
+          autocomplete="email"
         ></v-text-field>
         <v-text-field
           v-model="newPassword"
@@ -32,6 +36,8 @@
           class="mb-2"
           label="Passwort"
           type="password"
+          name="password"
+          autocomplete="new-password"
         ></v-text-field>
         <v-text-field
           v-model="confirmPassword"
@@ -40,6 +46,8 @@
           class="mb-2"
           label="Passwort bestätigen"
           type="password"
+          name="password-confirm"
+          autocomplete="new-password"
         ></v-text-field>
         <v-btn
           :disabled="!form"

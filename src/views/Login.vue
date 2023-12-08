@@ -18,6 +18,8 @@
             :rules="[required]"
             class="mb-2"
             label="Name"
+            name="username"
+            autocomplete="username"
           ></v-text-field>
           <v-text-field
             v-model="password"
@@ -26,6 +28,8 @@
             class="mb-2"
             label="Passwort"
             type="password"
+            name="password"
+            autocomplete="current-password"
           ></v-text-field>
           <v-btn
             :disabled="!form"
@@ -104,7 +108,7 @@ function onRegister() {
 }
 
 function required(v: string) {
-  return !!v || "Field is required";
+  return !!v || "Eingabe erforderlich";
 }
 </script>
 
