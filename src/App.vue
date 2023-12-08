@@ -37,7 +37,11 @@
     <v-main class="d-flex justify-center mt-3">
       <v-container>
         <MessagesContainer></MessagesContainer>
-        <v-fade-transition><router-view></router-view></v-fade-transition>
+        <router-view v-slot="{ Component }">
+          <transition mode="out-in" name="fade">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </v-container>
       <DialogModal></DialogModal>
     </v-main>
@@ -83,3 +87,15 @@ function onLogout() {
 
 const drawer = ref(true);
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
