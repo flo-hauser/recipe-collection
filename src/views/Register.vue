@@ -11,17 +11,18 @@
           v-model="username"
           :readonly="loading"
           :rules="[required]"
+          @input="checkUserInfoExists"
+          :error-messages="userErrorMessages"
           class="mb-2"
-          clearable
           label="Name"
         ></v-text-field>
         <v-text-field
           v-model="email"
           :readonly="loading"
           :rules="[required, isEmail]"
+          @input="checkUserInfoExists"
           type="email"
           class="mb-2"
-          clearable
           label="E-Mail"
         ></v-text-field>
         <v-text-field
@@ -29,7 +30,6 @@
           :readonly="loading"
           :rules="[required]"
           class="mb-2"
-          clearable
           label="Passwort"
           type="password"
         ></v-text-field>
@@ -38,7 +38,6 @@
           :readonly="loading"
           :rules="[required, confiremdPasswordMatches]"
           class="mb-2"
-          clearable
           label="Passwort bestätigen"
           type="password"
         ></v-text-field>
@@ -67,15 +66,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import { computed } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "vue-router";
 import { useModalStore } from "@/store/modal";
+import { useDebounceFn } from "@vueuse/core";
+import { useRecipeApi } from "@/composables/api";
 
 const username = ref("");
+const usernameInUse = ref(false);
+const userErrorMessages = ref([] as Array<string>);
 const email = ref("");
+const emailInUse = ref(false);
+const emailErrorMessages = ref([] as Array<string>);
 const newPassword = ref("");
 const confirmPassword = ref("");
 const passwordIdent = computed(
@@ -111,7 +116,10 @@ async function onRegister() {
         }, 2000);
       })
       .catch((err) => {
-        modalStore.showDialog("Registrieren fehlgeschlagen", "alert");
+        modalStore.showDialog(
+          `Registrieren fehlgeschlagen\n${err.response.data.message}`,
+          "alert"
+        );
         console.warn(err);
       })
       .finally(() => {
@@ -119,6 +127,44 @@ async function onRegister() {
       });
   }
 }
+
+const checkUserExists = useDebounceFn(async () => {
+  if (username.value.length > 3) {
+    usernameInUse.value = await useRecipeApi<boolean>(
+      "/users/exists",
+      "GET",
+      null,
+      { username: username.value }
+    );
+  }
+}, 750);
+
+const checkEmailExists = useDebounceFn(async () => {
+  if (email.value.length > 3 && isEmail(email.value)) {
+    emailInUse.value = await useRecipeApi<boolean>(
+      "/users/exists",
+      "GET",
+      null,
+      { email: email.value }
+    );
+  }
+}, 750);
+
+watch(usernameInUse, (inUse) => {
+  if (inUse) {
+    userErrorMessages.value = ["Benutzername bereits vergeben"];
+  } else {
+    userErrorMessages.value = [];
+  }
+});
+
+watch(emailInUse, (inUse) => {
+  if (inUse) {
+    emailErrorMessages.value = ["E-Mail bereits vergeben"];
+  } else {
+    emailErrorMessages.value = [];
+  }
+});
 
 function confiremdPasswordMatches(v: string) {
   return v == newPassword.value || "Passwort Eingaben stimmen nicht überein";

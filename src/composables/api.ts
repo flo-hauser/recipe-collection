@@ -9,7 +9,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
 function useRecipeApi<T>(
   endpoint: string,
   method: Method = "GET",
-  data: object | null = null
+  data: object | null = null,
+  params: object | null = null
 ) {
   const store = useAuthStore();
   endpoint = endpoint.replace(/api\/\d\//, "");
@@ -29,6 +30,10 @@ function useRecipeApi<T>(
 
   if (data) {
     config.data = data;
+  }
+
+  if (params) {
+    config.params = params;
   }
 
   return axios<T>(config)

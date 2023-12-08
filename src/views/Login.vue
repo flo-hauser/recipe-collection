@@ -17,7 +17,6 @@
             :readonly="loading"
             :rules="[required]"
             class="mb-2"
-            clearable
             label="Name"
           ></v-text-field>
           <v-text-field
@@ -25,7 +24,6 @@
             :readonly="loading"
             :rules="[required]"
             class="mb-2"
-            clearable
             label="Passwort"
             type="password"
           ></v-text-field>
