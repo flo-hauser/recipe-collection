@@ -30,15 +30,15 @@ import BookForm from "@/components/BookForm.vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useRouter } from "vue-router";
 import { useBookStore } from "@/store/book";
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 
 const store = useBookStore();
 const router = useRouter();
 
 const completed = ref(false);
 
-onMounted(() => {
-  store.$reset;
+onBeforeMount(() => {
+  store.$reset();
 });
 
 async function addBook() {
