@@ -6,112 +6,64 @@
       max-width="650px"
       color="lightSurface"
     >
-      <h2 v-if="isBook" class="mb-12">Neues Kochbuch</h2>
-      <h2 v-if="isMagazine" class="mb-12">Neues Magazin</h2>
-      <div class="mb-8 d-flex justify-space-around">
-        <v-btn :variant="bookBtnVariant" @click.stop="onToggleBookMag">
-          Buch
-        </v-btn>
-        <v-btn :variant="magBtnVariant" @click.stop="onToggleBookMag">
-          Heft
-        </v-btn>
+      <h2>
+        Neues
+        <span v-if="store.isBook">Kochbuch</span>
+        <span v-else>Magazin</span>
+      </h2>
+      <BookForm @save-book="addBook"></BookForm>
+      <div class="confirmed-icon">
+        <v-scale-transition>
+          <div v-show="completed">
+            <v-icon id="confirmed-register" color="primary">
+              mdi-check-circle
+            </v-icon>
+          </div>
+        </v-scale-transition>
       </div>
-      <v-form @submit.prevent="onAddBook">
-        <v-text-field
-          v-model="title"
-          :rules="[rules.required]"
-          class="mb-2"
-          clearable
-          label="Titel"
-        ></v-text-field>
-
-        <v-text-field
-          v-if="isBook"
-          v-model="author"
-          class="mb-2"
-          clearable
-          label="Author"
-        ></v-text-field>
-
-        <v-text-field
-          v-model="year"
-          type="number"
-          :rules="[rules.year]"
-          class="mb-2"
-          clearable
-          label="Jahr"
-        ></v-text-field>
-
-        <v-text-field
-          v-if="isMagazine"
-          v-model="issue"
-          class="mb-2"
-          clearable
-          label="Ausgabe"
-        ></v-text-field>
-
-        <v-btn
-          block
-          color="success"
-          size="large"
-          type="submit"
-          variant="elevated"
-        >
-          Anlegen
-        </v-btn>
-      </v-form>
     </v-sheet>
   </CenteredContainer>
 </template>
 
 <script setup lang="ts">
+import BookForm from "@/components/BookForm.vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
-import { ref, computed } from "vue";
-import { BookCreate } from "@/types/dto/BookCreate";
-import { useRecipeApi } from "@/composables/api";
 import { useRouter } from "vue-router";
+import { useBookStore } from "@/store/book";
+import { onMounted, ref } from "vue";
 
+const store = useBookStore();
 const router = useRouter();
 
-const isBook = ref(true);
-const isMagazine = computed(() => !isBook.value);
-const bookBtnVariant = computed(() => (isBook.value ? "elevated" : "outlined"));
-const magBtnVariant = computed(() => (isBook.value ? "outlined" : "elevated"));
-const title = ref("");
-const year = ref<number | null>(null);
-const author = ref<string | null>(null);
-const issue = ref<string | null>(null);
+const completed = ref(false);
 
-function onToggleBookMag() {
-  isBook.value = !isBook.value;
-}
+onMounted(() => {
+  store.$reset;
+});
 
-const rules = {
-  required: (value: string) => !!value || "Field is required",
-  year: (value: number) => (value > 1800 && value < 3000) || value == null,
-};
-
-async function onAddBook() {
-  const newBook: BookCreate = {
-    type: isBook.value ? "cookbook" : "magazine",
-    title: title.value,
-  };
-
-  if (author.value && isBook.value) {
-    newBook.author = author.value;
-  }
-  if (issue.value && isMagazine.value) {
-    newBook.issue = issue.value;
-  }
-  if (year.value) {
-    newBook.year = year.value?.toString();
-  }
-
+async function addBook() {
   try {
-    await useRecipeApi("books", "POST", newBook);
-    router.push({ name: "allBooks" });
+    await store.postBook();
+    completed.value = true;
+    setTimeout(() => {
+      router.push({ name: "allBooks" });
+    }, 1000);
   } catch (e) {
     console.warn(e);
   }
 }
 </script>
+
+<style scoped>
+h2 {
+  margin-bottom: 2rem;
+}
+
+.confirmed-icon {
+  height: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: end;
+}
+</style>
