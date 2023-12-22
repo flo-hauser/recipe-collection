@@ -7,7 +7,11 @@
       color="lightSurface"
     >
       <h2>{{ store.title }}</h2>
-      <BookForm @save-book="updateBook"></BookForm>
+      <BookForm
+        @save-book="updateBook"
+        @delete-book="deleteBook"
+        :edit-mode="true"
+      ></BookForm>
       <div class="confirmed-icon">
         <v-scale-transition>
           <div v-show="completed">
@@ -46,6 +50,14 @@ async function updateBook() {
   setTimeout(() => {
     router.push({ name: "allBooks" });
   }, 1000);
+}
+
+async function deleteBook(id: number) {
+  await store.deleteBook(id);
+  setTimeout(() => {
+    completed.value = true;
+    router.push({ name: "allBooks" });
+  }, 500);
 }
 </script>
 

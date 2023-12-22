@@ -85,5 +85,13 @@ export const useBookStore = defineStore("book", {
         throw new Error("incomplete book");
       }
     },
+
+    async deleteBook(id: number) {
+      if (this.id == id && this._links) {
+        await useRecipeApi(this._links?.self, "DELETE");
+        this.$reset();
+        return true;
+      }
+    },
   },
 });
