@@ -65,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineEmits, ref } from "vue";
+import { computed, ref } from "vue";
 import { BookCreate } from "@/types/dto/BookCreate";
 import { useBookStore } from "@/store/book";
 

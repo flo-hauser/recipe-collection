@@ -14,6 +14,14 @@ export const useBookListStore = defineStore("bookList", {
     getMagazines: (state) => {
       return state.bookList.filter((book) => book.type == "magazine");
     },
+
+    getSelectItems: (state) => {
+      return state.bookList.map((book) => ({
+        value: book.id,
+        title:
+          book.type == "cookbook" ? book.title : `${book.title} ${book.issue}`,
+      }));
+    },
   },
 
   actions: {

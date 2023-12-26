@@ -37,6 +37,12 @@ const routes = [
     props: true,
     component: () => import("@/views/EditBook.vue"),
   },
+
+  {
+    path: "/recipes/new",
+    name: "newRecipe",
+    component: () => import("@/views/NewRecipe.vue"),
+  },
 ];
 
 const router = createRouter({
