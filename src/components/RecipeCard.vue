@@ -3,6 +3,7 @@ import { Recipe } from "@/types/dto/Recipe";
 import { computed, toRefs } from "vue";
 import fallbackImg from "@/assets/example-image.jpg";
 import { useBookListStore } from "@/store/bookList";
+import router from "@/router";
 
 const bookListStore = useBookListStore();
 
@@ -37,6 +38,14 @@ const issue = computed(() => {
     class="recipe-card"
     rounded
     color="lightSurface"
+    @click="
+      router.push({
+        name: 'editRecipe',
+        params: {
+          id: props.recipe.id,
+        },
+      })
+    "
   >
     <div class="img-container">
       <v-img

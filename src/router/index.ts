@@ -43,6 +43,13 @@ const routes = [
     name: "newRecipe",
     component: () => import("@/views/NewRecipe.vue"),
   },
+
+  {
+    path: "/recipe/:id",
+    name: "editRecipe",
+    props: true,
+    component: () => import("@/views/EditRecipe.vue"),
+  },
 ];
 
 const router = createRouter({

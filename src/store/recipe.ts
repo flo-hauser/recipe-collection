@@ -43,7 +43,7 @@ export const useRecipeStore = defineStore("recipe", {
     },
 
     async getRecipeById(id: number) {
-      const response = await useRecipeApi<Recipe>(`recipe/${id}`);
+      const response = await useRecipeApi<Recipe>(`recipes/${id}`);
       this.id = response.id;
       this._links = response._links;
       this.page = response.page;
