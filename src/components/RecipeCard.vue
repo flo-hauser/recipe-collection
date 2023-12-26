@@ -2,6 +2,9 @@
 import { Recipe } from "@/types/dto/Recipe";
 import { computed, toRefs } from "vue";
 import fallbackImg from "@/assets/example-image.jpg";
+import { useBookListStore } from "@/store/bookList";
+
+const bookListStore = useBookListStore();
 
 const props = defineProps<{
   recipe: Recipe;
@@ -15,6 +18,14 @@ const imgSrc = computed(() => {
   } else {
     return image_path.value;
   }
+});
+
+const bookTitle = computed(() => {
+  return bookListStore.getBookByLink(props.recipe._links.book)?.title;
+});
+
+const issue = computed(() => {
+  return bookListStore.getBookByLink(props.recipe._links.book)?.issue;
 });
 </script>
 
@@ -38,6 +49,10 @@ const imgSrc = computed(() => {
     </div>
     <div class="content-container py-4">
       <h3>{{ title }}</h3>
+      <p>
+        {{ bookTitle }}
+        <span v-if="issue">{{ issue }}</span>
+      </p>
       <p>Seite {{ page }}</p>
       <p>{{ id }}</p>
     </div>

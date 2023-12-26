@@ -8,7 +8,7 @@
     >
       <h2>
         Neues
-        <span v-if="store.isBook">Kochbuch</span>
+        <span v-if="bookStore.isBook">Kochbuch</span>
         <span v-else>Magazin</span>
       </h2>
       <BookForm @save-book="addBook"></BookForm>
@@ -31,19 +31,22 @@ import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useRouter } from "vue-router";
 import { useBookStore } from "@/store/book";
 import { onBeforeMount, ref } from "vue";
+import { useBookListStore } from "@/store/bookList";
 
-const store = useBookStore();
+const bookStore = useBookStore();
+const bookListStore = useBookListStore();
 const router = useRouter();
 
 const completed = ref(false);
 
 onBeforeMount(() => {
-  store.$reset();
+  bookStore.$reset();
 });
 
 async function addBook() {
   try {
-    await store.postBook();
+    const addedBook = await bookStore.postBook();
+    bookListStore.bookList.push(addedBook);
     completed.value = true;
     setTimeout(() => {
       router.push({ name: "allBooks" });

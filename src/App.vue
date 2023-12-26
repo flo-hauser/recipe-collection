@@ -56,9 +56,11 @@ import ListNavigation from "./components/ListNavigation.vue";
 import DialogModal from "@/components/DialogModal.vue";
 import MessagesContainer from "./components/MessagesContainer.vue";
 import { useRouter } from "vue-router";
+import { useBookListStore } from "./store/bookList";
 
 const router = useRouter();
 const authStore = useAuthStore();
+const bookListStore = useBookListStore();
 
 onMounted(async () => {
   await authStore.refresh();
@@ -71,6 +73,13 @@ onMounted(async () => {
   if (!authStore.isTokenValid()) {
     authStore.logout();
     router.push({ path: "/login" });
+  }
+
+  if (authStore.loggedIn && authStore.isTokenValid()) {
+    await bookListStore.getBooks();
+    setTimeout(() => {
+      router.push({ name: "search" });
+    }, 500);
   }
 
   setInterval(() => {

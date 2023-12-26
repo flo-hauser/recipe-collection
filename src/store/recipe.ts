@@ -49,7 +49,7 @@ export const useRecipeStore = defineStore("recipe", {
       this.page = response.page;
       this.title = response.title;
 
-      const bookIdFind = /(?=(\w+\/)*)\d+/.exec(response._links.book);
+      const bookIdFind = /\d+$/.exec(response._links.book);
       if (bookIdFind) {
         this.bookId = Number(bookIdFind[0]);
       }

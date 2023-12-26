@@ -22,6 +22,24 @@ export const useBookListStore = defineStore("bookList", {
           book.type == "cookbook" ? book.title : `${book.title} ${book.issue}`,
       }));
     },
+
+    getBookById: (state) => {
+      return (id: number) => {
+        const books = state.bookList.filter((book) => book.id == id);
+        if (books) {
+          return books[0];
+        }
+      };
+    },
+
+    getBookByLink: (state) => {
+      return (link: string) => {
+        const books = state.bookList.filter((book) => book._links.self == link);
+        if (books) {
+          return books[0];
+        }
+      };
+    },
   },
 
   actions: {
