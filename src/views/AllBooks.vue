@@ -2,7 +2,7 @@
   <div>
     <v-list>
       <v-list-item
-        v-for="book in books"
+        v-for="book in store.bookList"
         :key="book.id"
         class="mb-2"
         :to="{
@@ -37,16 +37,14 @@
 </template>
 
 <script setup lang="ts">
-import { useRecipeApi } from "@/composables/api";
 import router from "@/router";
-import { GeneralBook } from "@/types/dto/Book";
 import { onMounted } from "vue";
-import { ref } from "vue";
+import { useBookListStore } from "@/store/bookList";
 
-const books = ref<Array<GeneralBook>>([]);
+const store = useBookListStore();
 
 onMounted(async () => {
-  books.value = await useRecipeApi<Array<GeneralBook>>("books");
+  store.getBooks();
 });
 
 function newBook() {
