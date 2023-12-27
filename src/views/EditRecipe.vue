@@ -8,8 +8,8 @@
     >
       <h2>{{ store.title }}</h2>
       <RecipeForm
-        @save-book="updateRecipe"
-        @delete-book="deleteRecipe"
+        @save-recipe="updateRecipe"
+        @delete-recipe="deleteRecipe"
         :edit-mode="true"
       ></RecipeForm>
       <div class="confirmed-icon">
@@ -31,6 +31,7 @@ import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useRecipeStore } from "@/store/recipe";
 import { useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
+import { useSearchStore } from "@/store/search";
 
 const store = useRecipeStore();
 const router = useRouter();
@@ -45,11 +46,12 @@ onMounted(async () => {
 });
 
 async function updateRecipe() {
-  // await store.updateBook();
-  // completed.value = true;
-  // setTimeout(() => {
-  //   router.push({ name: "allBooks" });
-  // }, 1000);
+  await store.updateRecipe();
+  completed.value = true;
+  useSearchStore().search();
+  setTimeout(() => {
+    router.push({ name: "search" });
+  }, 1000);
 }
 
 async function deleteRecipe(id: number) {

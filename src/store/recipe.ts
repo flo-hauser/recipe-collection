@@ -57,9 +57,16 @@ export const useRecipeStore = defineStore("recipe", {
       return response;
     },
 
-    async updateBook() {
+    async updateRecipe() {
       if (this.id && this._links && this.title && this.bookId) {
-        return true;
+        const response = await useRecipeApi<Recipe>(this._links.self, "PUT", {
+          ...this.recipe,
+          book_id: this.bookId,
+        });
+
+        this._links = response._links;
+        this.title = response.title;
+        this.page = response.page;
       } else {
         throw new Error("incomplete book");
       }
