@@ -72,9 +72,9 @@ export const useRecipeStore = defineStore("recipe", {
       }
     },
 
-    async deleteBook(id: number) {
+    async deleteRecipe(id: number) {
       if (this.id == id && this._links) {
-        await useRecipeApi(this._links?.self, "DELETE");
+        await useRecipeApi<void>(this._links?.self, "DELETE");
         this.$reset();
         return true;
       }

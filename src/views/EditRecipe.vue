@@ -55,11 +55,12 @@ async function updateRecipe() {
 }
 
 async function deleteRecipe(id: number) {
-  // await store.deleteBook(id);
-  // setTimeout(() => {
-  //   completed.value = true;
-  //   router.push({ name: "allBooks" });
-  // }, 500);
+  await store.deleteRecipe(id);
+  completed.value = true;
+  useSearchStore().search();
+  setTimeout(() => {
+    router.push({ name: "search" });
+  }, 500);
 }
 </script>
 
