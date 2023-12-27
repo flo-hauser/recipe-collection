@@ -1,3 +1,46 @@
+<template>
+  <v-card width="400">
+    <v-img :src="imgSrc" height="300" cover class="text-white"></v-img>
+    <v-card-title>
+      {{ title }}
+    </v-card-title>
+    <v-card-text>
+      <h3>
+        {{ bookTitle }}
+        <span v-if="issue">{{ issue }}</span>
+      </h3>
+      <v-spacer></v-spacer>
+      <p>Seite {{ page }}</p>
+      <v-rating
+        hover
+        :length="5"
+        :model-value="fakeRating"
+        empty-icon="mdi-star-outline"
+        full-icon="mdi-star"
+        color="warning"
+        active-color="warning"
+        size="x-large"
+        density="comfortable"
+      />
+    </v-card-text>
+    <v-card-actions class="d-flex justify-end">
+      <v-btn
+        @click.left="
+          router.push({
+            name: 'editRecipe',
+            params: {
+              id: props.recipe.id,
+            },
+          })
+        "
+        variant="text"
+        icon="mdi-pencil "
+      >
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
 <script setup lang="ts">
 import { Recipe } from "@/types/dto/Recipe";
 import { computed, toRefs } from "vue";
@@ -7,11 +50,15 @@ import router from "@/router";
 
 const bookListStore = useBookListStore();
 
+const fakeRating = computed(() => {
+  return Math.floor(Math.random() * 5) + 1;
+});
+
 const props = defineProps<{
   recipe: Recipe;
 }>();
 
-const { id, title, page, image_path } = toRefs(props.recipe);
+const { title, page, image_path } = toRefs(props.recipe);
 
 const imgSrc = computed(() => {
   if (image_path.value === "" || image_path.value === null) {
@@ -29,56 +76,3 @@ const issue = computed(() => {
   return bookListStore.getBookByLink(props.recipe._links.book)?.issue;
 });
 </script>
-
-<template>
-  <v-sheet
-    :elevation="5"
-    :height="200"
-    width="80%"
-    class="recipe-card"
-    rounded
-    color="lightSurface"
-    @click="
-      router.push({
-        name: 'editRecipe',
-        params: {
-          id: props.recipe.id,
-        },
-      })
-    "
-  >
-    <div class="img-container">
-      <v-img
-        width="100%"
-        height="100%"
-        aspect-ratio="1/1"
-        cover
-        :src="imgSrc"
-      ></v-img>
-    </div>
-    <div class="content-container py-4">
-      <h3>{{ title }}</h3>
-      <p>
-        {{ bookTitle }}
-        <span v-if="issue">{{ issue }}</span>
-      </p>
-      <p>Seite {{ page }}</p>
-      <p>{{ id }}</p>
-    </div>
-  </v-sheet>
-</template>
-
-<style scoped>
-.recipe-card {
-  display: flex;
-  justify-content: space-between;
-}
-
-.recipe-card .img-container {
-  width: 30%;
-}
-
-.recipe-card .content-container {
-  width: 65%;
-}
-</style>

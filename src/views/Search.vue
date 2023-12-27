@@ -2,7 +2,7 @@
   <div>
     <h1>Rezeptesuche</h1>
     <v-text-field
-      v-model="searchTerm"
+      v-model="store.searchTerm"
       label="Suche"
       prepend-inner-icon="mdi-magnify"
       variant="outlined"
@@ -14,38 +14,26 @@
     </v-text-field>
 
     <div class="search-results">
-      <RecipeCard
-        v-for="recipe of searchResults"
-        :key="recipe.id"
-        :recipe="recipe"
-      ></RecipeCard>
+      <v-fade-transition group hide-on-leave>
+        <RecipeCard
+          v-for="recipe of store.result"
+          :key="recipe.id"
+          :recipe="recipe"
+        ></RecipeCard>
+      </v-fade-transition>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { ref } from "vue";
-import { Recipe } from "@/types/dto/Recipe";
+<script setup lang="ts">
 import RecipeCard from "@/components/RecipeCard.vue";
-import { useRecipeApi } from "@/composables/api";
+import { useSearchStore } from "@/store/search";
 
-export default {
-  setup() {
-    const searchTerm = ref("");
-    const searchResults = ref<Array<Recipe>>([]);
+const store = useSearchStore();
 
-    async function onSearch() {
-      searchResults.value = [];
-
-      searchResults.value = await useRecipeApi<Array<Recipe>>("/recipes");
-    }
-
-    return { searchTerm, searchResults, onSearch };
-  },
-  components: {
-    RecipeCard,
-  },
-};
+async function onSearch() {
+  store.search();
+}
 </script>
 
 <style scoped>
@@ -60,10 +48,9 @@ h1 {
 }
 
 .search-results {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  justify-items: center;
+  gap: 2rem 0.5rem;
 }
 </style>

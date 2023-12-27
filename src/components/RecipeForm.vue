@@ -51,7 +51,6 @@
 import { ref } from "vue";
 import { useRecipeStore } from "@/store/recipe";
 import { RecipeCreate } from "@/types/dto/RecipeCreate";
-import { Recipe } from "@/types/dto/Recipe";
 import { useBookListStore } from "@/store/bookList";
 import { onMounted } from "vue";
 
