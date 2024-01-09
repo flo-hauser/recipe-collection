@@ -5,6 +5,8 @@ type Links = {
 type RecipeLinks = {
   book: string;
   user: string;
+  image: string;
+  thumbnail: string;
 } & Links;
 
 type BookLinks = {

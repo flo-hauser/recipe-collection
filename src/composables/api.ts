@@ -5,6 +5,7 @@ import { useAuthStore } from "@/store/auth";
 import { Token } from "@/types/dto/Token";
 
 const apiUrl = import.meta.env.VITE_API_URL;
+const apiHost = import.meta.env.VITE_API_HOST;
 
 function useRecipeApi<T>(
   endpoint: string,
@@ -64,4 +65,4 @@ function useRecipeApiLogin(username: string, password: string) {
     });
 }
 
-export { useRecipeApi, useRecipeApiLogin };
+export { useRecipeApi, useRecipeApiLogin, apiUrl, apiHost };

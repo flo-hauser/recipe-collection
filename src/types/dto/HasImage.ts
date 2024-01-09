@@ -1,3 +1,3 @@
 export type HasImage = {
-  image_path: string | null;
+  image: string | null;
 };

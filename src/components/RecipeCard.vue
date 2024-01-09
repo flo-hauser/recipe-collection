@@ -47,6 +47,8 @@ import { computed, toRefs } from "vue";
 import fallbackImg from "@/assets/example-image.jpg";
 import { useBookListStore } from "@/store/bookList";
 import router from "@/router";
+import { apiHost } from "@/composables/api";
+import urlJoin from "url-join";
 
 const bookListStore = useBookListStore();
 
@@ -58,13 +60,13 @@ const props = defineProps<{
   recipe: Recipe;
 }>();
 
-const { title, page, image_path } = toRefs(props.recipe);
+const { title, page } = toRefs(props.recipe);
 
 const imgSrc = computed(() => {
-  if (image_path.value === "" || image_path.value === null) {
+  if (!props.recipe._links.image) {
     return fallbackImg;
   } else {
-    return image_path.value;
+    return urlJoin(apiHost, props.recipe._links.image);
   }
 });
 

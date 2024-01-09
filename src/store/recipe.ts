@@ -12,6 +12,7 @@ export const useRecipeStore = defineStore("recipe", {
     title: "",
     page: undefined as number | undefined,
     bookId: undefined as number | undefined,
+    image: undefined as string | undefined,
   }),
 
   getters: {
