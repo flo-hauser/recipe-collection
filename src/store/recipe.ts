@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
-import { GeneralBook } from "@/types/dto/Book";
 import { RecipeCreate } from "@/types/dto/RecipeCreate";
 import { Recipe } from "@/types/dto/Recipe";
-import { useRecipeApi } from "@/composables/api";
+import { useRecipeApi, useRecipeApiUpload } from "@/composables/api";
 import { RecipeLinks } from "@/types/dto/Links";
+import fallbackImg from "@/assets/placeholder.svg";
+import { apiHost } from "@/composables/api";
+import urlJoin from "url-join";
 
 export const useRecipeStore = defineStore("recipe", {
   state: () => ({
@@ -13,6 +15,7 @@ export const useRecipeStore = defineStore("recipe", {
     page: undefined as number | undefined,
     bookId: undefined as number | undefined,
     image: undefined as string | undefined,
+    newImageFile: undefined as File | undefined,
   }),
 
   getters: {
@@ -32,15 +35,40 @@ export const useRecipeStore = defineStore("recipe", {
         page: state.page,
       };
     },
+
+    imgSrc: function (state) {
+      if (state._links?.image) {
+        return urlJoin(apiHost, state._links.image);
+      } else if (state.newImageFile) {
+        return URL.createObjectURL(state.newImageFile);
+      } else {
+        return fallbackImg;
+      }
+    },
   },
 
   actions: {
-    async postRecipe(): Promise<GeneralBook> {
+    async postRecipe(): Promise<Recipe> {
       if (!(this.title && this.bookId && this.page)) {
         throw new Error("incomplete recipe");
       }
 
-      return await useRecipeApi<GeneralBook>("recipes", "POST", this.newRecipe);
+      let newRecipe = await useRecipeApi<Recipe>(
+        "recipes",
+        "POST",
+        this.newRecipe
+      );
+      if (newRecipe.id && this.newImageFile) {
+        const formData = new FormData();
+        formData.append("image", this.newImageFile);
+
+        newRecipe = await useRecipeApiUpload<Recipe>(
+          `recipes/${newRecipe.id}/image`,
+          "PUT",
+          formData
+        );
+      }
+      return newRecipe;
     },
 
     async getRecipeById(id: number) {
@@ -49,6 +77,7 @@ export const useRecipeStore = defineStore("recipe", {
       this._links = response._links;
       this.page = response.page;
       this.title = response.title;
+      this.image = response.image ?? undefined;
 
       const bookIdFind = /\d+$/.exec(response._links.book);
       if (bookIdFind) {
@@ -60,14 +89,26 @@ export const useRecipeStore = defineStore("recipe", {
 
     async updateRecipe() {
       if (this.id && this._links && this.title && this.bookId) {
-        const response = await useRecipeApi<Recipe>(this._links.self, "PUT", {
+        let response = await useRecipeApi<Recipe>(this._links.self, "PUT", {
           ...this.recipe,
           book_id: this.bookId,
         });
 
+        if (this.newImageFile) {
+          const formData = new FormData();
+          formData.append("image", this.newImageFile);
+
+          response = await useRecipeApiUpload<Recipe>(
+            `recipes/${this.id}/image`,
+            "PUT",
+            formData
+          );
+        }
+
         this._links = response._links;
         this.title = response.title;
         this.page = response.page;
+        this.image = response.image ?? undefined;
       } else {
         throw new Error("incomplete book");
       }

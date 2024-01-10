@@ -1,4 +1,11 @@
 <template>
+  <v-img
+    :src="store.imgSrc"
+    class="mb-4"
+    height="20rem"
+    cover
+    @click="onImageClick"
+  />
   <v-form v-model="form" @submit.prevent="onSaveRecipe">
     <v-text-field
       v-model="store.title"
@@ -21,6 +28,17 @@
       :items="bookListStore.getSelectItems"
       label="Kochbuch"
     ></v-select>
+
+    <v-file-input
+      @update:modelValue="onFileInput"
+      :multiple="false"
+      prepend-icon=""
+      label="Bild hochladen"
+      accept="image/png, image/jpeg"
+      clearable
+      capture="enviroment"
+      ref="fileInput"
+    ></v-file-input>
 
     <v-btn
       :disabled="!form"
@@ -48,11 +66,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRecipeStore } from "@/store/recipe";
 import { RecipeCreate } from "@/types/dto/RecipeCreate";
 import { useBookListStore } from "@/store/bookList";
-import { onMounted } from "vue";
 
 const store = useRecipeStore();
 const bookListStore = useBookListStore();
@@ -61,6 +78,17 @@ onMounted(() => {
 });
 
 const form = ref(false);
+const fileInput = ref<HTMLElement | null>(null);
+
+const onFileInput = (files: Array<File>) => {
+  if (files) {
+    store.newImageFile = files[0];
+  }
+};
+
+const onImageClick = () => {
+  fileInput.value?.click();
+};
 
 defineProps({
   editMode: Boolean,

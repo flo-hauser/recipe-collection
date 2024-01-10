@@ -8,6 +8,6 @@
 
 <style scoped>
 .dialog-center {
-  margin-top: 10vh;
+  margin-top: 1vh;
 }
 </style>

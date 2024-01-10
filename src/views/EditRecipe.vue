@@ -1,7 +1,7 @@
 <template>
   <CenteredContainer>
     <v-sheet
-      class="pa-12 mx-auto"
+      class="px-12 pt-6 mx-auto"
       rounded
       max-width="650px"
       color="lightSurface"
@@ -30,7 +30,7 @@ import RecipeForm from "@/components/RecipeForm.vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useRecipeStore } from "@/store/recipe";
 import { useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, onBeforeMount } from "vue";
 import { useSearchStore } from "@/store/search";
 
 const store = useRecipeStore();
@@ -39,6 +39,10 @@ const router = useRouter();
 const completed = ref(false);
 const props = defineProps({
   id: String,
+});
+
+onBeforeMount(() => {
+  store.$reset();
 });
 
 onMounted(async () => {

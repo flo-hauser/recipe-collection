@@ -1,7 +1,7 @@
 <template>
   <CenteredContainer>
     <v-sheet
-      class="pa-12 mx-auto"
+      class="px-12 pt-6 mx-auto"
       rounded
       max-width="650px"
       color="lightSurface"

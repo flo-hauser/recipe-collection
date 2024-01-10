@@ -65,4 +65,38 @@ function useRecipeApiLogin(username: string, password: string) {
     });
 }
 
-export { useRecipeApi, useRecipeApiLogin, apiUrl, apiHost };
+function useRecipeApiUpload<T>(
+  endpoint: string,
+  method: Method = "PUT",
+  data: FormData
+) {
+  const store = useAuthStore();
+  endpoint = endpoint.replace(/api\/\d\//, "");
+  const url = urlJoin(apiUrl, endpoint);
+
+  const config: AxiosRequestConfig = {
+    method,
+    url,
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+
+  if (store.loggedIn && store.token?.token && config.headers) {
+    config.headers.Authorization = `Bearer ${store.token.token}`;
+  }
+
+  config.data = data;
+
+  return axios<T>(config)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.warn(err);
+      throw err;
+    });
+}
+
+export { useRecipeApi, useRecipeApiLogin, useRecipeApiUpload, apiUrl, apiHost };
