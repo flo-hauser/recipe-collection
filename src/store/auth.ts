@@ -36,10 +36,17 @@ export const useAuthStore = defineStore("auth", {
         const t = await useRecipeApi<Token>("tokens/refresh", "GET");
         if (t) {
           this.token = t;
+          this.loggedIn = true;
+          this.user = await useRecipeApi<User>("users/me", "GET");
+          return true;
+        } else {
+          this.$reset();
         }
         return false;
       } catch (e) {
         console.log("could not refresh");
+        this.$reset();
+        return false;
       }
     },
 

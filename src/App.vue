@@ -63,18 +63,22 @@ const authStore = useAuthStore();
 const bookListStore = useBookListStore();
 
 onMounted(async () => {
+  // Check if sesssion can be restored
   await authStore.refresh();
 
+  // if not logged in, redirect to login page
   if (!authStore.loggedIn) {
     authStore.logout();
     router.push({ path: "/login" });
   }
 
+  // if logged in but token is invalid, redirect to login page
   if (!authStore.isTokenValid()) {
     authStore.logout();
     router.push({ path: "/login" });
   }
 
+  // if logged in and token is valid, redirect to search page
   if (authStore.loggedIn && authStore.isTokenValid()) {
     await bookListStore.getBooks();
     setTimeout(() => {
@@ -82,6 +86,7 @@ onMounted(async () => {
     }, 500);
   }
 
+  // poll token refresh every 10 seconds
   setInterval(() => {
     if (authStore.loggedIn && authStore.tokenRemainingTime() < 12000) {
       authStore.refresh();
