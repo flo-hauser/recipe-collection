@@ -10,7 +10,7 @@ type RecipeLinks = {
 } & Links;
 
 type BookLinks = {
-  recipes: string;
+  recipes: Array<string>;
   user: string;
 } & Links;
 
