@@ -3,9 +3,9 @@ import { BookType } from "./BookType";
 type BookCreate = {
   type: BookType;
   title: string;
-  year?: number | undefined;
-  author?: string | undefined;
-  issue?: string | undefined;
+  year?: number;
+  author?: string;
+  issue?: string;
 };
 
 export { BookCreate };

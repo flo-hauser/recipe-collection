@@ -55,7 +55,7 @@ export const useBookStore = defineStore("book", {
       const bookResponse = await useRecipeApi<GeneralBook>(`books/${id}`);
       this.id = bookResponse.id;
       this._links = bookResponse._links;
-      this.isBook = bookResponse.type == "cookbook" ? true : false;
+      this.isBook = bookResponse.type == "cookbook";
       this.title = bookResponse.title;
       this.year = bookResponse.year;
       this.author = bookResponse.author;
@@ -74,7 +74,7 @@ export const useBookStore = defineStore("book", {
 
         this.id = bookResponse.id;
         this._links = bookResponse._links;
-        this.isBook = bookResponse.type == "cookbook" ? true : false;
+        this.isBook = bookResponse.type == "cookbook";
         this.title = bookResponse.title;
         this.year = bookResponse.year;
         this.author = bookResponse.author;

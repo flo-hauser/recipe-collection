@@ -49,9 +49,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useAuthStore } from "./store/auth";
-import { onMounted } from "vue";
 import ListNavigation from "./components/ListNavigation.vue";
 import DialogModal from "@/components/DialogModal.vue";
 import MessagesContainer from "./components/MessagesContainer.vue";

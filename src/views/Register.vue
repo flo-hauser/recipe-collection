@@ -74,9 +74,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import CenteredContainer from "@/components/CenteredContainer.vue";
-import { computed } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "vue-router";
 import { useModalStore } from "@/store/modal";
