@@ -27,11 +27,13 @@
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import RecipeForm from "@/components/RecipeForm.vue";
 import { useRecipeStore } from "@/store/recipe";
+import { useSearchStore } from "@/store/search";
 import { ref, onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const store = useRecipeStore();
+const searchStore = useSearchStore();
 
 const completed = ref(false);
 
@@ -43,6 +45,8 @@ async function addRecipe() {
   try {
     await store.postRecipe();
     completed.value = true;
+    searchStore.searchTerm = store.recipe.title;
+    searchStore.search();
     setTimeout(() => {
       router.push({ name: "search" });
     }, 1000);

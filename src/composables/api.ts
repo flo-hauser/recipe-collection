@@ -21,12 +21,11 @@ function useRecipeApi<T>(
     method,
     url,
     withCredentials: true,
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
   };
 
-  if (store.loggedIn && store.token?.token) {
-    config.headers = {
-      Authorization: `Bearer ${store.token.token}`,
-    };
+  if (store.loggedIn && store.token?.token && config.headers) {
+    config.headers.Authorization = `Bearer ${store.token.token}`;
   }
 
   if (data) {
@@ -50,6 +49,7 @@ function useRecipeApi<T>(
 function useRecipeApiLogin(username: string, password: string) {
   const headers = {
     Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+    Accept: "application/json",
   };
 
   return axios
@@ -80,6 +80,7 @@ function useRecipeApiUpload<T>(
     withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
+      Accept: "application/json",
     },
   };
 

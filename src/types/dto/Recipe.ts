@@ -6,4 +6,5 @@ export type Recipe = {
   id: number;
   page: number;
   title: string;
+  rating: number;
 } & HasImage;

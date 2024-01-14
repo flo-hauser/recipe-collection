@@ -40,6 +40,18 @@
       ref="fileInput"
     ></v-file-input>
 
+    <v-rating
+      v-model="store.rating"
+      :length="5"
+      hover
+      empty-icon="mdi-star-outline"
+      full-icon="mdi-star"
+      color="warning"
+      active-color="warning"
+      size="x-large"
+      density="comfortable"
+    />
+
     <v-btn
       :disabled="!form"
       block

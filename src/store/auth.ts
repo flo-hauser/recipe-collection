@@ -20,7 +20,7 @@ export const useAuthStore = defineStore("auth", {
           this.loggedIn = true;
           this.user = await useRecipeApi<User>("users/me", "GET");
         } else {
-          this.$reset;
+          this.$reset();
         }
       } catch (err) {
         console.warn("failed login");
@@ -28,7 +28,7 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     logout() {
-      this.$reset;
+      this.$reset();
     },
 
     async refresh() {
@@ -73,7 +73,7 @@ export const useAuthStore = defineStore("auth", {
           const expiryDateString = state.token.token_expiration;
           const expiryDate = new Date(Date.parse(expiryDateString));
           const currentDate = new Date();
-          return expiryDate > currentDate ? true : false;
+          return expiryDate > currentDate;
         } else {
           return false;
         }

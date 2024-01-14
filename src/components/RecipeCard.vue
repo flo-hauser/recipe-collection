@@ -1,5 +1,5 @@
 <template>
-  <v-card width="400">
+  <v-card width="400" variant="elevated" elevation="8">
     <v-img :src="imgSrc" height="300" cover class="text-white"></v-img>
     <v-card-title>
       {{ title }}
@@ -14,7 +14,8 @@
       <v-rating
         hover
         :length="5"
-        :model-value="fakeRating"
+        v-model="rating"
+        @click.stop="rateRecipe(rating)"
         empty-icon="mdi-star-outline"
         full-icon="mdi-star"
         color="warning"
@@ -44,23 +45,21 @@
 <script setup lang="ts">
 import { Recipe } from "@/types/dto/Recipe";
 import { computed, toRefs } from "vue";
-import fallbackImg from "@/assets/example-image.jpg";
-import { useBookListStore } from "@/store/bookList";
 import router from "@/router";
-import { apiHost } from "@/composables/api";
 import urlJoin from "url-join";
+import { useBookListStore } from "@/store/bookList";
+import { useRecipeStore } from "@/store/recipe";
+import { apiHost } from "@/composables/api";
+import fallbackImg from "@/assets/example-image.jpg";
 
 const bookListStore = useBookListStore();
-
-const fakeRating = computed(() => {
-  return Math.floor(Math.random() * 5) + 1;
-});
+const recipeStore = useRecipeStore();
 
 const props = defineProps<{
   recipe: Recipe;
 }>();
 
-const { title, page } = toRefs(props.recipe);
+const { title, page, rating } = toRefs(props.recipe);
 
 const imgSrc = computed(() => {
   if (!props.recipe._links.image) {
@@ -77,4 +76,12 @@ const bookTitle = computed(() => {
 const issue = computed(() => {
   return bookListStore.getBookByLink(props.recipe._links.book)?.issue;
 });
+
+async function rateRecipe(newRating: number) {
+  await recipeStore.getRecipeById(props.recipe.id);
+  const updatedRecipe = await recipeStore.rateRecipe(newRating);
+  if (updatedRecipe) {
+    rating.value = updatedRecipe.rating;
+  }
+}
 </script>

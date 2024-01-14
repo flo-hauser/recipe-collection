@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
 import { RecipeCreate } from "@/types/dto/RecipeCreate";
 import { Recipe } from "@/types/dto/Recipe";
-import { useRecipeApi, useRecipeApiUpload } from "@/composables/api";
+import { useRecipeApi, useRecipeApiUpload, apiHost } from "@/composables/api";
 import { RecipeLinks } from "@/types/dto/Links";
 import fallbackImg from "@/assets/placeholder.svg";
-import { apiHost } from "@/composables/api";
 import urlJoin from "url-join";
 
 export const useRecipeStore = defineStore("recipe", {
@@ -16,6 +15,7 @@ export const useRecipeStore = defineStore("recipe", {
     bookId: undefined as number | undefined,
     image: undefined as string | undefined,
     newImageFile: undefined as File | undefined,
+    rating: 0 as number,
   }),
 
   getters: {
@@ -24,6 +24,7 @@ export const useRecipeStore = defineStore("recipe", {
         title: state.title,
         page: state.page ?? 0,
         book_id: state.bookId ?? 0,
+        rating: state.rating ?? 0,
       };
     },
 
@@ -33,6 +34,7 @@ export const useRecipeStore = defineStore("recipe", {
         id: state.id,
         title: state.title,
         page: state.page,
+        rating: state.rating,
       };
     },
 
@@ -78,6 +80,7 @@ export const useRecipeStore = defineStore("recipe", {
       this.page = response.page;
       this.title = response.title;
       this.image = response.image ?? undefined;
+      this.rating = response.rating;
 
       const bookIdFind = /\d+$/.exec(response._links.book);
       if (bookIdFind) {
@@ -119,6 +122,20 @@ export const useRecipeStore = defineStore("recipe", {
         await useRecipeApi<void>(this._links?.self, "DELETE");
         this.$reset();
         return true;
+      }
+    },
+
+    async rateRecipe(rating: number) {
+      if (this._links && rating >= 0 && rating <= 5) {
+        const response = await useRecipeApi<Recipe>(
+          `${this._links.self}/rating`,
+          "PUT",
+          null,
+          { rating }
+        );
+        this.rating = response.rating;
+
+        return response;
       }
     },
   },
