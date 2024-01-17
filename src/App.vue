@@ -20,6 +20,12 @@
               >
                 Login
               </v-list-item>
+              <v-list-item
+                v-if="!authStore.loggedIn"
+                @click.stop="router.push({ path: '/register' })"
+              >
+                Registrieren
+              </v-list-item>
             </v-list>
           </v-menu>
         </v-btn>
@@ -34,7 +40,7 @@
       <ListNavigation></ListNavigation>
     </v-navigation-drawer>
 
-    <v-main class="d-flex justify-center mt-3">
+    <v-main class="d-flex justify-center mt-3" style="min-height: 90vh">
       <v-container>
         <MessagesContainer></MessagesContainer>
         <router-view v-slot="{ Component }">
@@ -45,6 +51,20 @@
       </v-container>
       <DialogModal></DialogModal>
     </v-main>
+    <v-footer
+      class="d-flex justify-end pe-12"
+      color="lightSurface"
+      style="max-height: 4vh"
+    >
+      <ul class="bottom-links">
+        <li>
+          <router-link to="/imprint">Impressum</router-link>
+        </li>
+        <li>
+          <router-link to="/about">About</router-link>
+        </li>
+      </ul>
+    </v-footer>
   </v-app>
 </template>
 
@@ -110,5 +130,22 @@ const drawer = ref(true);
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.bottom-links {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.bottom-links li {
+  margin-left: 1rem;
+}
+
+.bottom-links li a {
+  text-decoration: none;
+  color: inherit;
 }
 </style>

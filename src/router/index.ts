@@ -51,6 +51,18 @@ const routes = [
     props: true,
     component: () => import("@/views/EditRecipe.vue"),
   },
+
+  {
+    path: "/imprint",
+    name: "imprint",
+    component: () => import("@/views/Imprint.vue"),
+  },
+
+  {
+    path: "/about",
+    name: "about",
+    component: () => import("@/views/About.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -60,8 +72,8 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const loginPath = "/login";
-  const authRequired = to.path !== loginPath;
+  const publicPaths = ["/login", "/register", "/about", "/imprint"];
+  const authRequired = !publicPaths.includes(to.path);
   const auth = useAuthStore();
   if (authRequired && !auth.user) {
     return "/login";
