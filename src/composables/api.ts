@@ -1,5 +1,4 @@
-import axios from "axios";
-import { AxiosRequestConfig, Method } from "axios";
+import axios, { AxiosRequestConfig, Method } from "axios";
 import urlJoin from "url-join";
 import { useAuthStore } from "@/store/auth";
 import { Token } from "@/types/dto/Token";

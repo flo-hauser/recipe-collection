@@ -2,16 +2,20 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/store/auth";
 
+// Components
+import Search from "@/views/Search.vue";
+import Login from "@/views/Login.vue";
+
 const routes = [
   {
     path: "/",
     name: "search",
-    component: () => import("@/views/Search.vue"),
+    component: Search,
   },
 
   {
     path: "/login",
-    component: () => import("@/views/Login.vue"),
+    component: Login,
   },
 
   {
