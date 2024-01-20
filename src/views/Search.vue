@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Rezeptesuche</h1>
     <v-text-field
       v-model="store.searchTerm"
       label="Suche"
@@ -14,13 +13,13 @@
     </v-text-field>
 
     <div class="search-results">
-      <v-fade-transition group hide-on-leave>
+      <v-fab-transition group leave-absolute>
         <RecipeCard
           v-for="recipe of store.result"
           :key="recipe.id"
           :recipe="recipe"
         ></RecipeCard>
-      </v-fade-transition>
+      </v-fab-transition>
     </div>
   </div>
 </template>

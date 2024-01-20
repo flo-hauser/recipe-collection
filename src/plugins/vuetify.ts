@@ -11,7 +11,8 @@ import "@fortawesome/fontawesome-free/css/all.css";
 
 // Composables
 import { createVuetify } from "vuetify";
-import { aliases, fa } from "vuetify/iconsets/fa";
+import { fa } from "vuetify/iconsets/fa";
+import { mdi, aliases } from "vuetify/iconsets/mdi";
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
@@ -36,6 +37,7 @@ export default createVuetify({
   icons: {
     aliases,
     sets: {
+      mdi,
       fa,
     },
   },

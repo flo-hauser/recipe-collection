@@ -5,6 +5,7 @@ import { useRecipeApi, useRecipeApiUpload, apiHost } from "@/composables/api";
 import { RecipeLinks } from "@/types/dto/Links";
 import fallbackImg from "@/assets/placeholder.svg";
 import urlJoin from "url-join";
+import { Tag } from "@/types/dto/Tag";
 
 export const useRecipeStore = defineStore("recipe", {
   state: () => ({
@@ -16,6 +17,7 @@ export const useRecipeStore = defineStore("recipe", {
     image: undefined as string | undefined,
     newImageFile: undefined as File | undefined,
     rating: 0 as number,
+    tags: [] as Array<Tag>,
   }),
 
   getters: {
@@ -25,6 +27,7 @@ export const useRecipeStore = defineStore("recipe", {
         page: state.page ?? 0,
         book_id: state.bookId ?? 0,
         rating: state.rating ?? 0,
+        tags: state.tags,
       };
     },
 
@@ -35,6 +38,7 @@ export const useRecipeStore = defineStore("recipe", {
         title: state.title,
         page: state.page,
         rating: state.rating,
+        tags: state.tags,
       };
     },
 
@@ -50,6 +54,16 @@ export const useRecipeStore = defineStore("recipe", {
   },
 
   actions: {
+    pushTag(tag: string) {
+      const newTag = tag.replace("#", "").replace(" ", "").trim();
+      if (newTag.length > 0) {
+        // check if tag_name is already in tags
+        if (!this.tags.find((t) => t.tag_name === newTag)) {
+          this.tags.push({ tag_name: newTag });
+        }
+      }
+    },
+
     async postRecipe(): Promise<Recipe> {
       if (!(this.title && this.bookId && this.page)) {
         throw new Error("incomplete recipe");
@@ -81,6 +95,7 @@ export const useRecipeStore = defineStore("recipe", {
       this.title = response.title;
       this.image = response.image ?? undefined;
       this.rating = response.rating;
+      this.tags = response.tags;
 
       const bookIdFind = /\d+$/.exec(response._links.book);
       if (bookIdFind) {

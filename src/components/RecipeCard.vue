@@ -9,20 +9,33 @@
         {{ bookTitle }}
         <span v-if="issue">{{ issue }}</span>
       </h3>
-      <v-spacer></v-spacer>
-      <p>Seite {{ page }}</p>
-      <v-rating
-        hover
-        :length="5"
-        v-model="rating"
-        @click.stop="rateRecipe(rating)"
-        empty-icon="mdi-star-outline"
-        full-icon="mdi-star"
-        color="warning"
-        active-color="warning"
-        size="x-large"
-        density="comfortable"
-      />
+      <p class="mb-6">Seite {{ page }}</p>
+      <div class="tags-container">
+        <v-chip
+          v-for="tag in props.recipe.tags"
+          :key="tag.id"
+          variant="elevated"
+          size="small"
+          color="warning"
+          class="tag"
+        >
+          {{ tag.tag_name }}
+        </v-chip>
+      </div>
+      <div class="d-flex justify-center">
+        <v-rating
+          hover
+          :length="5"
+          v-model="rating"
+          @click.stop="rateRecipe(rating)"
+          empty-icon="mdi-star-outline"
+          full-icon="mdi-star"
+          color="warning"
+          active-color="warning"
+          size="x-large"
+          density="comfortable"
+        />
+      </div>
     </v-card-text>
     <v-card-actions class="d-flex justify-end">
       <v-btn
@@ -85,3 +98,21 @@ async function rateRecipe(newRating: number) {
   }
 }
 </script>
+
+<style scoped>
+.tags-container {
+  display: inline-block;
+  max-height: 62px;
+  overflow: scroll;
+  margin-bottom: 10px;
+}
+.tags-container::-webkit-scrollbar {
+  display: none;
+}
+
+.tag {
+  font-weight: 600;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+</style>

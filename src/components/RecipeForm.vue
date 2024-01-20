@@ -4,20 +4,25 @@
     class="mb-4"
     height="20rem"
     cover
-    @click="onImageClick"
-  />
+    @click="onImageUpload"
+  >
+    <v-btn
+      class="upload-btn"
+      icon="mdi-upload"
+      variant="elevated"
+      @click.stop="onImageUpload"
+    ></v-btn>
+  </v-img>
   <v-form v-model="form" @submit.prevent="onSaveRecipe">
     <v-text-field
       v-model="store.title"
       :rules="[rules.required]"
-      class="mb-2"
       clearable
       label="Titel"
     ></v-text-field>
 
     <v-text-field
       v-model="store.page"
-      class="mb-2"
       clearable
       label="Seite"
       type="number"
@@ -29,16 +34,28 @@
       label="Kochbuch"
     ></v-select>
 
-    <v-file-input
-      @update:modelValue="onFileInput"
-      :multiple="false"
-      prepend-icon=""
-      label="Bild hochladen"
-      accept="image/png, image/jpeg"
-      clearable
-      capture="enviroment"
-      ref="fileInput"
-    ></v-file-input>
+    <v-text-field
+      label="Tags"
+      v-model="tagInput"
+      @update:model-value="onTagInput"
+      @keydown.enter.prevent="
+        tagInput = tagInput + ' ';
+        onTagInput(tagInput);
+      "
+    ></v-text-field>
+
+    <div class="tags-container">
+      <v-fade-transition group leave-absolute>
+        <v-chip
+          v-for="tag in store.tags"
+          :key="tag.tag_name"
+          @click:close="onTagRemove(tag.tag_name)"
+          closable
+        >
+          {{ tag.tag_name }}
+        </v-chip>
+      </v-fade-transition>
+    </div>
 
     <v-rating
       v-model="store.rating"
@@ -74,6 +91,18 @@
     >
       Löschen
     </v-btn>
+
+    <v-file-input
+      @update:modelValue="onFileInput"
+      :multiple="false"
+      prepend-icon=""
+      label="Bild hochladen"
+      accept="image/png, image/jpeg"
+      clearable
+      capture="enviroment"
+      ref="fileInput"
+      class="d-none"
+    ></v-file-input>
   </v-form>
 </template>
 
@@ -83,46 +112,75 @@ import { useRecipeStore } from "@/store/recipe";
 import { RecipeCreate } from "@/types/dto/RecipeCreate";
 import { useBookListStore } from "@/store/bookList";
 
+// general setup
 const store = useRecipeStore();
 const bookListStore = useBookListStore();
 onMounted(() => {
   bookListStore.getBooks();
 });
-
 const form = ref(false);
-const fileInput = ref<HTMLElement | null>(null);
-
-const onFileInput = (files: Array<File>) => {
-  if (files) {
-    store.newImageFile = files[0];
-  }
+const rules = {
+  required: (value: string) => !!value || "Field is required",
 };
 
-const onImageClick = () => {
-  fileInput.value?.click();
-};
-
+// save and delete actions
 defineProps({
   editMode: Boolean,
 });
-
 const emit = defineEmits<{
   (e: "saveRecipe", recipe: RecipeCreate): void;
   (e: "deleteRecipe", recipeId: number): void;
 }>();
 
-const rules = {
-  required: (value: string) => !!value || "Field is required",
-};
-
-function onSaveRecipe() {
+const onSaveRecipe = () => {
+  if (tagInput.value.trim().length > 0) {
+    store.tags.push({ tag_name: tagInput.value.trim().replace("#", "") });
+  }
   const recipe = store.newRecipe;
   emit("saveRecipe", recipe);
-}
-
-function onDeleteRecipe() {
+};
+const onDeleteRecipe = () => {
   if (store.id) {
     emit("deleteRecipe", store.id);
   }
-}
+};
+
+// tag input actions
+const tagInput = ref("");
+const onTagInput = (input: string) => {
+  // if input is space, push input to tag list and clear input
+  if (input.endsWith(" ") && input.trim().length > 0) {
+    store.pushTag(input);
+    tagInput.value = "";
+  }
+};
+const onTagRemove = (tag: string) => {
+  store.tags = store.tags.filter((t) => t.tag_name !== tag);
+};
+
+// file input actions
+const fileInput = ref<HTMLElement | null>(null);
+const onFileInput = (files: Array<File>) => {
+  if (files) {
+    store.newImageFile = files[0];
+  }
+};
+const onImageUpload = () => {
+  fileInput.value?.click();
+};
 </script>
+
+<style scoped>
+.upload-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.7rem;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+</style>
