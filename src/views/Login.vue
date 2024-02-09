@@ -23,11 +23,13 @@
           ></v-text-field>
           <v-text-field
             v-model="password"
+            :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+            :on-click:append-inner="toggleShowPassword"
+            :type="showPassword ? 'text' : 'password'"
             :readonly="loading"
             :rules="[required]"
             class="mb-2"
             label="Passwort"
-            type="password"
             name="password"
             autocomplete="current-password"
           ></v-text-field>
@@ -72,6 +74,7 @@ import CenteredContainer from "@/components/CenteredContainer.vue";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "vue-router";
 import { useModalStore } from "@/store/modal";
+import { useShowPassword } from "@/composables/useShowPassword";
 
 const username = ref("");
 const password = ref("");
@@ -80,6 +83,7 @@ const form = ref(false);
 const router = useRouter();
 const authStore = useAuthStore();
 const modalStore = useModalStore();
+const { showPassword, toggleShowPassword } = useShowPassword();
 
 function onSubmit() {
   if (!form.value) {

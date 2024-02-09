@@ -31,11 +31,13 @@
         ></v-text-field>
         <v-text-field
           v-model="newPassword"
+          @click:append-inner="toggleShowPassword"
           :readonly="loading"
           :rules="[required]"
+          :type="showPassword ? 'text' : 'password'"
+          :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
           class="mb-2"
           label="Passwort"
-          type="password"
           name="password"
           autocomplete="new-password"
         ></v-text-field>
@@ -43,9 +45,9 @@
           v-model="confirmPassword"
           :readonly="loading"
           :rules="[required, confiremdPasswordMatches]"
+          :type="showPassword ? 'text' : 'password'"
           class="mb-2"
           label="Passwort bestätigen"
-          type="password"
           name="password-confirm"
           autocomplete="new-password"
         ></v-text-field>
@@ -81,6 +83,7 @@ import { useRouter } from "vue-router";
 import { useModalStore } from "@/store/modal";
 import { useDebounceFn } from "@vueuse/core";
 import { useRecipeApi } from "@/composables/api";
+import { useShowPassword } from "@/composables/useShowPassword";
 
 const username = ref("");
 const usernameInUse = ref(false);
@@ -97,6 +100,7 @@ const loading = ref(false);
 const form = ref(false);
 const completed = ref(false);
 
+const { showPassword, toggleShowPassword } = useShowPassword();
 const router = useRouter();
 const authStore = useAuthStore();
 const modalStore = useModalStore();

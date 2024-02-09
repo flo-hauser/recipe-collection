@@ -5,6 +5,18 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@use "vuetify/settings" with (
+  $color-pack: true
+);
+
+/* prevent autfill background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px rgb(212, 228, 192) inset !important;
+}
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  opacity: 1 !important;
+}

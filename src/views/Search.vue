@@ -11,6 +11,15 @@
         <v-btn @click.stop="onSearch">Suche</v-btn>
       </template>
     </v-text-field>
+    <v-expansion-panels class="mb-4">
+      <v-expansion-panel>
+        <v-expansion-panel-title> Filter </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <!-- horitontal list of filter items-->
+          <p>Hier kommen filter einstellungen</p>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
 
     <div class="search-results">
       <v-fab-transition group leave-absolute>
