@@ -43,10 +43,10 @@ export const useRecipeStore = defineStore("recipe", {
     },
 
     imgSrc: function (state) {
-      if (state._links?.image) {
-        return urlJoin(apiHost, state._links.image);
-      } else if (state.newImageFile) {
+      if (state.newImageFile) {
         return URL.createObjectURL(state.newImageFile);
+      } else if (state._links?.image) {
+        return urlJoin(apiHost, state._links.image);
       } else {
         return fallbackImg;
       }
