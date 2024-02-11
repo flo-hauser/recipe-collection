@@ -23,6 +23,7 @@
           :readonly="loading"
           :rules="[required, isEmail]"
           @input="checkEmailExists"
+          :error-messages="emailErrorMessages"
           type="email"
           class="mb-2"
           label="E-Mail"
@@ -147,27 +148,26 @@ async function onRegister() {
   }
 }
 
-const checkUserExists = useDebounceFn(async () => {
-  if (username.value.length > 3) {
-    usernameInUse.value = await useRecipeApi<boolean>(
-      "/users/exists",
-      "GET",
-      null,
-      { username: username.value }
-    );
+const debounceTime = 400;
+const checkUserExists = useDebounceFn(() => {
+  if (username.value.length > 1) {
+    useRecipeApi<boolean>("/users/exists", "GET", null, {
+      username: username.value,
+    }).then((res) => {
+      usernameInUse.value = res;
+    });
   }
-}, 750);
+}, debounceTime);
 
-const checkEmailExists = useDebounceFn(async () => {
+const checkEmailExists = useDebounceFn(() => {
   if (email.value.length > 3 && isEmail(email.value)) {
-    emailInUse.value = await useRecipeApi<boolean>(
-      "/users/exists",
-      "GET",
-      null,
-      { email: email.value }
-    );
+    useRecipeApi<boolean>("/users/exists", "GET", null, {
+      email: email.value,
+    }).then((res) => {
+      emailInUse.value = res;
+    });
   }
-}, 750);
+}, debounceTime);
 
 watch(usernameInUse, (inUse) => {
   if (inUse) {
