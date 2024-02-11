@@ -44,7 +44,10 @@
         <v-text-field
           v-model="confirmPassword"
           :readonly="loading"
-          :rules="[required, confiremdPasswordMatches]"
+          :rules="[
+            required,
+            confiremdPasswordMatches(newPassword, confirmPassword),
+          ]"
           :type="showPassword ? 'text' : 'password'"
           class="mb-2"
           label="Passwort bestätigen"
@@ -84,6 +87,11 @@ import { useModalStore } from "@/store/modal";
 import { useDebounceFn } from "@vueuse/core";
 import { useRecipeApi } from "@/composables/api";
 import { useShowPassword } from "@/composables/useShowPassword";
+import {
+  required,
+  confiremdPasswordMatches,
+  isEmail,
+} from "@/validation/rules";
 
 const username = ref("");
 const usernameInUse = ref(false);
@@ -176,22 +184,6 @@ watch(emailInUse, (inUse) => {
     emailErrorMessages.value = [];
   }
 });
-
-function confiremdPasswordMatches(v: string) {
-  return v == newPassword.value || "Passwort Eingaben stimmen nicht überein";
-}
-
-function required(v: string) {
-  return !!v || "Eingabe erforderlich";
-}
-
-function isEmail(v: string) {
-  return (
-    !v ||
-    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-    "gültige E-mail angeben"
-  );
-}
 </script>
 
 <style scoped>

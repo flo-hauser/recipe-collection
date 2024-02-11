@@ -11,7 +11,7 @@
     <v-list-item :to="{ name: 'newBook' }">Hinzufügen</v-list-item>
     <v-list-item type="divider"></v-list-item>
     <v-divider></v-divider>
-    <v-list-item>Benutzer</v-list-item>
+    <v-list-item :to="{ name: 'user' }">Benutzer</v-list-item>
   </v-list>
 </template>
 

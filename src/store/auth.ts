@@ -4,6 +4,7 @@ import { Token } from "@/types/dto/Token";
 import { User } from "@/types/dto/User";
 import { NewUser } from "@/types/dto/NewUser";
 import { useRecipeApiLogin, useRecipeApi } from "@/composables/api";
+import { throwStatement } from "@babel/types";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -58,6 +59,25 @@ export const useAuthStore = defineStore("auth", {
           newUserObject
         );
         return newUser;
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
+    },
+
+    async updatePassword(newPassword: string) {
+      try {
+        const updatedUser = await useRecipeApi<User>(
+          `users/${this.user?.id}`,
+          "PUT",
+          {
+            username: this.user?.username,
+            email: this.user?.email,
+            password: newPassword,
+          }
+        );
+        this.user = updatedUser;
+        return updatedUser;
       } catch (e) {
         console.log(e);
         throw e;

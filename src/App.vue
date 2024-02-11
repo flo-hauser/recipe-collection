@@ -97,11 +97,12 @@ onMounted(async () => {
     router.push({ path: "/login" });
   }
 
-  // if logged in and token is valid, redirect to search page
+  // if logged in and token is valid, redirect to search page and activate drawer
   if (authStore.loggedIn && authStore.isTokenValid()) {
     await bookListStore.getBooks();
     setTimeout(() => {
       router.push({ name: "search" });
+      drawer.value = true;
     }, 500);
   }
 
@@ -118,7 +119,7 @@ function onLogout() {
   router.push({ path: "/login" });
 }
 
-const drawer = ref(true);
+const drawer = ref(false);
 </script>
 
 <style>
