@@ -7,6 +7,7 @@ export const useModalStore = defineStore("Modal", {
     color: "primary" as Color,
     message: "",
     title: undefined as string | undefined,
+    confirmAction: undefined as Function | undefined,
   }),
   getters: {
     btnColor: (state) => {
@@ -23,9 +24,10 @@ export const useModalStore = defineStore("Modal", {
     },
   },
   actions: {
-    showDialog(message: string, level = "alert") {
+    showDialog(message: string, level: string, callback: Function) {
       this.visible = true;
       this.message = message;
+      this.confirmAction = callback;
       switch (level) {
         case "alert":
           this.color = "error";
@@ -47,6 +49,7 @@ export const useModalStore = defineStore("Modal", {
       this.message = "";
       this.color = "primary";
       this.title = undefined;
+      this.confirmAction = undefined;
     },
   },
 });

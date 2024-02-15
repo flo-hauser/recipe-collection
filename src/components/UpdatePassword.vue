@@ -2,7 +2,7 @@
   <v-form @submit.prevent="submit" v-model="form" v-if="!completed">
     <v-row>
       <v-col>
-        <h4 class="align-left mb-3">Passwort ändern</h4>
+        <h4 class="text-left mb-3">Passwort ändern</h4>
       </v-col>
     </v-row>
     <v-text-field

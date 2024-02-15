@@ -1,7 +1,7 @@
 <template>
   <CenteredContainer>
     <v-sheet
-      class="px-6 pt-6 mx-auto"
+      class="px-6 pt-6 mx-auto pb-6"
       rounded
       max-width="650px"
       color="lightSurface"
@@ -9,7 +9,7 @@
     >
       <h2>Mein Account</h2>
 
-      <v-tabs v-model="tab" class="mb-6">
+      <v-tabs v-model="tab" class="mb-6" grow>
         <v-tab value="profile">Profil</v-tab>
         <v-tab value="password">Passwort</v-tab>
         <v-tab value="group">Gruppe</v-tab>
@@ -38,7 +38,12 @@
           <UpdatePassword @update:password="updatedPassword"></UpdatePassword>
         </v-window-item>
 
-        <v-window-item value="group"> </v-window-item>
+        <v-window-item value="group">
+          <UserGroupPanel
+            :user="user"
+            @create:group="refreshUser"
+          ></UserGroupPanel>
+        </v-window-item>
       </v-window>
     </v-sheet>
   </CenteredContainer>
@@ -47,6 +52,7 @@
 <script setup lang="ts">
 import CenteredContainer from "@/components/CenteredContainer.vue";
 import UpdatePassword from "@/components/UpdatePassword.vue";
+import UserGroupPanel from "@/components/UserGroupPanel.vue";
 import { useAuthStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
@@ -59,6 +65,10 @@ const updatedPassword = () => {
   setTimeout(() => {
     tab.value = "profile";
   }, 750);
+};
+
+const refreshUser = async () => {
+  await useAuthStore().fetchSelf();
 };
 </script>
 

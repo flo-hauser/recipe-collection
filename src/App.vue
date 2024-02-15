@@ -1,18 +1,30 @@
 <template>
   <v-app>
-    <v-app-bar :elevation="5" prominent>
+    <v-app-bar :elevation="5" height="80">
       <v-app-bar-nav-icon
         @click.stop="drawer = !drawer"
         icon="mdi-menu"
       ></v-app-bar-nav-icon>
+
       <v-app-bar-title>Rezepteverzeichnis</v-app-bar-title>
+
       <template v-slot:append>
         <v-btn>
-          <v-icon>mdi-account</v-icon>
+          <v-avatar
+            v-if="authStore.user?._links.avatar"
+            :image="authStore.user._links.avatar"
+          ></v-avatar>
+          <v-icon v-else>mdi-account</v-icon>
           <v-menu activator="parent">
             <v-list>
               <v-list-item v-if="authStore.loggedIn" @click.stop="onLogout">
                 Logout
+              </v-list-item>
+              <v-list-item
+                v-if="authStore.loggedIn"
+                @click.stop="router.push({ path: '/user' })"
+              >
+                Profil
               </v-list-item>
               <v-list-item
                 v-if="!authStore.loggedIn"
@@ -115,8 +127,9 @@ onMounted(async () => {
 });
 
 function onLogout() {
-  authStore.$reset();
-  router.push({ path: "/login" });
+  router.push({ path: "/login" }).then(() => {
+    authStore.logout();
+  });
 }
 
 const drawer = ref(false);

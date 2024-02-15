@@ -4,7 +4,6 @@ import { Token } from "@/types/dto/Token";
 import { User } from "@/types/dto/User";
 import { NewUser } from "@/types/dto/NewUser";
 import { useRecipeApiLogin, useRecipeApi } from "@/composables/api";
-import { throwStatement } from "@babel/types";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -30,6 +29,14 @@ export const useAuthStore = defineStore("auth", {
     },
     logout() {
       this.$reset();
+    },
+
+    async fetchSelf() {
+      try {
+        this.user = await useRecipeApi<User>("users/me", "GET");
+      } catch (e) {
+        console.log("could not fetch self");
+      }
     },
 
     async refresh() {

@@ -14,6 +14,13 @@ type BookLinks = {
   user: string;
 } & Links;
 
-type UserLinks = {} & Links;
+type UserLinks = {
+  user_group: string | null;
+  avatar: string;
+} & Links;
 
-export { RecipeLinks, BookLinks, UserLinks };
+type UserGroupLinks = {
+  users: Array<string>;
+} & Links;
+
+export { RecipeLinks, BookLinks, UserLinks, UserGroupLinks };
