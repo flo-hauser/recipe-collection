@@ -55,7 +55,11 @@ export const useRecipeStore = defineStore("recipe", {
 
   actions: {
     pushTag(tag: string) {
-      const newTag = tag.replace("#", "").replace(" ", "").trim();
+      const newTag = tag
+        .replace("#", "")
+        .replace(" ", "")
+        .replace(",", "")
+        .trim();
       if (newTag.length > 0) {
         // check if tag_name is already in tags
         if (!this.tags.find((t) => t.tag_name === newTag)) {

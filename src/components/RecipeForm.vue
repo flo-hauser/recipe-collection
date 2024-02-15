@@ -134,7 +134,7 @@ const emit = defineEmits<{
 
 const onSaveRecipe = () => {
   if (tagInput.value.trim().length > 0) {
-    store.tags.push({ tag_name: tagInput.value.trim().replace("#", "") });
+    store.pushTag(tagInput.value);
   }
   const recipe = store.newRecipe;
   emit("saveRecipe", recipe);
@@ -148,8 +148,8 @@ const onDeleteRecipe = () => {
 // tag input actions
 const tagInput = ref("");
 const onTagInput = (input: string) => {
-  // if input is space, push input to tag list and clear input
-  if (input.endsWith(" ") && input.trim().length > 0) {
+  // if input is space or comma, push input to tag list and clear input
+  if (input.endsWith(" ") || (input.endsWith(",") && input.trim().length > 0)) {
     store.pushTag(input);
     tagInput.value = "";
   }
