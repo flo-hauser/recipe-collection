@@ -28,7 +28,12 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     logout() {
-      this.$reset();
+      // delete token
+      useRecipeApi("tokens", "DELETE")
+        .then(() => {
+          this.$reset();
+        })
+        .catch(() => {});
     },
 
     async fetchSelf() {
