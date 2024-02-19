@@ -5,10 +5,17 @@ import { useAuthStore } from "@/store/auth";
 // Components
 import Search from "@/views/Search.vue";
 import Login from "@/views/Login.vue";
+import Home from "@/views/Home.vue";
 
 const routes = [
   {
     path: "/",
+    name: "home",
+    component: Home,
+  },
+
+  {
+    path: "/search",
     name: "search",
     component: Search,
   },
@@ -83,7 +90,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPaths = ["/login", "/register", "/about", "/imprint"];
+  const publicPaths = ["/home", "/login", "/register", "/about", "/imprint"];
   const authRequired = !publicPaths.includes(to.path);
   const auth = useAuthStore();
   if (authRequired && !auth.user) {

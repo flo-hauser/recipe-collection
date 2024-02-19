@@ -6,7 +6,9 @@
         icon="mdi-menu"
       ></v-app-bar-nav-icon>
 
-      <v-app-bar-title>Rezepteverzeichnis</v-app-bar-title>
+      <v-app-bar-title :to="{ name: 'home' }" link>
+        Rezepteverzeichnis
+      </v-app-bar-title>
 
       <template v-slot:append>
         <v-btn>
@@ -57,7 +59,7 @@
         <MessagesContainer></MessagesContainer>
         <router-view v-slot="{ Component }">
           <transition mode="out-in" name="fade">
-            <component :is="Component" />
+            <component :is="Component" @pushToSearch="showDrawer" />
           </transition>
         </router-view>
       </v-container>
@@ -88,6 +90,7 @@ import DialogModal from "@/components/DialogModal.vue";
 import MessagesContainer from "./components/MessagesContainer.vue";
 import { useRouter } from "vue-router";
 import { useBookListStore } from "./store/bookList";
+import { useDisplay } from "vuetify";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -113,8 +116,7 @@ onMounted(async () => {
   if (authStore.loggedIn && authStore.isTokenValid()) {
     await bookListStore.getBooks();
     setTimeout(() => {
-      router.push({ name: "search" });
-      drawer.value = true;
+      router.push({ name: "home" });
     }, 500);
   }
 
@@ -132,7 +134,16 @@ function onLogout() {
   });
 }
 
+// show drawer if redirected from home and display is md or up
+const { mdAndUp } = useDisplay();
 const drawer = ref(false);
+const showDrawer = () => {
+  if (mdAndUp.value) {
+    setTimeout(() => {
+      drawer.value = true;
+    }, 900);
+  }
+};
 </script>
 
 <style>
