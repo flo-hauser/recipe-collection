@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/store/auth";
 
 // Components
-import Search from "@/views/Search.vue";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 
@@ -17,7 +16,7 @@ const routes = [
   {
     path: "/search",
     name: "search",
-    component: Search,
+    component: () => import("@/views/Search.vue"),
   },
 
   {

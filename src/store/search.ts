@@ -12,12 +12,14 @@ export const useSearchStore = defineStore("search", {
     result: [] as Array<Recipe>,
     searchTerm: "",
     searchItem: undefined as SearchItem | undefined,
+    firstCall: true,
   }),
 
   getters: {},
 
   actions: {
     async search() {
+      this.firstCall = false;
       const tags: string[] = [];
       const filteredSearchTerm: string[] = [];
 
@@ -46,7 +48,20 @@ export const useSearchStore = defineStore("search", {
       );
     },
 
+    async searchRandom() {
+      if (this.firstCall) {
+        this.result = await useRecipeApi<Array<Recipe>>(
+          "recipes/search/random",
+          "GET",
+          null,
+          { limit: 10 }
+        );
+        this.firstCall = false;
+      }
+    },
+
     async searchByBook() {
+      this.firstCall = false;
       this.result = await useRecipeApi<Array<Recipe>>(
         "recipes/search",
         "GET",

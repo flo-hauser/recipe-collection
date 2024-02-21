@@ -36,12 +36,17 @@
 <script setup lang="ts">
 import RecipeCard from "@/components/RecipeCard.vue";
 import { useSearchStore } from "@/store/search";
+import { onMounted } from "vue";
 
 const store = useSearchStore();
 
 async function onSearch() {
   store.search();
 }
+
+onMounted(() => {
+  store.searchRandom();
+});
 </script>
 
 <style scoped>
