@@ -20,11 +20,16 @@
         </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
-
+    <v-pagination
+      v-if="totalItems > 0 && numberOfPages > 1"
+      v-model="currentPage"
+      :length="numberOfPages"
+      total-visible="5"
+    ></v-pagination>
     <div class="search-results">
       <v-fab-transition group leave-absolute>
         <RecipeCard
-          v-for="recipe of store.result"
+          v-for="recipe of paginatedItems"
           :key="recipe.id"
           :recipe="recipe"
         ></RecipeCard>
@@ -36,12 +41,23 @@
 <script setup lang="ts">
 import RecipeCard from "@/components/RecipeCard.vue";
 import { useSearchStore } from "@/store/search";
-import { onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import { usePagination } from "@/composables/usePagination";
+import { Recipe } from "@/types/dto/Recipe";
 
 const store = useSearchStore();
+const { result } = storeToRefs(store);
+const currentPage = ref(1);
+const { paginatedItems, totalItems, numberOfPages } = usePagination<Recipe>({
+  currentPage,
+  rowsPerPage: ref(13),
+  arrayToPaginate: result,
+});
 
 async function onSearch() {
-  store.search();
+  await store.search();
+  currentPage.value = 1;
 }
 
 onMounted(() => {
