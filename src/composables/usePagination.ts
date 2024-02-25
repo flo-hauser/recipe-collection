@@ -15,7 +15,7 @@ export function usePagination<T>(config: PaginationConfig<T>) {
   });
 
   const firstItem = computed(() => {
-    return (currentPage.value - 1) * rowsPerPage.value + 1;
+    return (currentPage.value - 1) * rowsPerPage.value;
   });
 
   const lastItem = computed(() => {
@@ -23,8 +23,8 @@ export function usePagination<T>(config: PaginationConfig<T>) {
   });
 
   const paginatedItems = computed(() => {
-    const start = firstItem.value - 1;
-    const end = lastItem.value - 1;
+    const start = firstItem.value;
+    const end = lastItem.value;
 
     return arrayToPaginate.value.slice(start, end);
   });

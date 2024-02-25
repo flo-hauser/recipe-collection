@@ -25,6 +25,7 @@
       v-model="currentPage"
       :length="numberOfPages"
       total-visible="5"
+      class="mb-4"
     ></v-pagination>
     <div class="search-results">
       <v-fab-transition group leave-absolute>
@@ -35,6 +36,13 @@
         ></RecipeCard>
       </v-fab-transition>
     </div>
+    <v-pagination
+      v-if="totalItems > 0 && numberOfPages > 1"
+      v-model="currentPage"
+      :length="numberOfPages"
+      total-visible="5"
+      class="my-4"
+    ></v-pagination>
   </div>
 </template>
 
@@ -44,14 +52,18 @@ import { useSearchStore } from "@/store/search";
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import { usePagination } from "@/composables/usePagination";
+import { useDisplay } from "vuetify";
 import { Recipe } from "@/types/dto/Recipe";
 
 const store = useSearchStore();
 const { result } = storeToRefs(store);
+
 const currentPage = ref(1);
+const { sm, xs } = useDisplay();
+const rowsPerPage = ref(12);
 const { paginatedItems, totalItems, numberOfPages } = usePagination<Recipe>({
   currentPage,
-  rowsPerPage: ref(13),
+  rowsPerPage,
   arrayToPaginate: result,
 });
 
@@ -62,7 +74,21 @@ async function onSearch() {
 
 onMounted(() => {
   store.searchRandom();
+  // resize event listener
+  window.addEventListener("resize", onResize);
+  onResize();
 });
+
+const onResize = () => {
+  // set rowsPerPage depending on screen size
+  if (sm.value) {
+    rowsPerPage.value = 6;
+  } else if (xs.value) {
+    rowsPerPage.value = 3;
+  } else {
+    rowsPerPage.value = 12;
+  }
+};
 </script>
 
 <style scoped>
